@@ -5,13 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Address extends Model
+class Alamat extends Model
 {
     use HasFactory;
-
-    protected $fillable = [
-        'user_id', 'label', 'recipient_name', 'phone', 'full_address', 'is_primary'
-    ];
+    protected $table = 'alamat';
+    protected $guarded = ['id'];
 
     public function user()
     {
@@ -19,7 +17,7 @@ class Address extends Model
     }
 
     public function addresses()
-{
-    return $this->hasMany(Address::class)->orderBy('is_primary', 'desc');
-}
+    {
+        return $this->hasMany(Alamat::class)->orderBy('is_utama', 'desc');
+    }
 }

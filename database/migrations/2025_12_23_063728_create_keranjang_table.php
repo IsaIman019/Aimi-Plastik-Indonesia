@@ -7,25 +7,21 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('keranjang', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('user_id')
-                  ->constrained()
-                  ->cascadeOnDelete();
-
             $table->foreignId('product_id')
-                  ->constrained()
+                  ->constrained('produk');
+            $table->foreignId('user_id')
+                  ->constrained('users')
                   ->cascadeOnDelete();
-
-            $table->tinyInteger('rating')->unsigned(); // 1–5
-            $table->text('comment')->nullable();
+            $table->integer('qty');
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('carts');
     }
 };

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Review;
 
-class HomeController extends Controller
+class BerandaController extends Controller
 {
     public function index()
     {

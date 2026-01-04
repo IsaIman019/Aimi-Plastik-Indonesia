@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
 {
-    Schema::create('news', function (Blueprint $table) {
+    Schema::create('artikel', function (Blueprint $table) {
         $table->id();
-        $table->string('title');
-        $table->string('slug')->unique(); // Untuk URL SEO friendly
-        $table->text('content');
-        $table->string('image')->nullable(); // Thumbnail berita
-        $table->string('category')->default('Tips Bisnis'); // Label kategori kecil
-        $table->boolean('is_active')->default(true);
+        $table->string('judul');
+        $table->string('gambar')->nullable();
+        $table->foreignId('kategori_id')->constrained('general')->cascadeOnDelete();
+        $table->text('konten');
+        $table->string('status')->default('DRAFT');
         $table->timestamps();
     });
 }

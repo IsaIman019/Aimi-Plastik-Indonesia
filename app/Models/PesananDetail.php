@@ -4,17 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Review extends Model
+class PesananDetail extends Model
 {
-    protected $table = 'review';
+    protected $table = 'pesanan_detail';
     protected $guarded = ['id'];
+
     public function pesanan()
     {
         return $this->belongsTo(Pesanan::class);
     }
 
-    public function produk()
+    public function keranjang()
     {
-        return $this->belongsTo(Produk::class);
+        return $this->belongsTo(Keranjang::class);
     }
 }

@@ -11,37 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // 1. Update Tabel Users
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('nama');
             $table->string('email')->unique();
+            $table->string('avatar')->nullable();
+            $table->string('phone', 15)->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->enum('role', ['Admin', 'Pelanggan'])->default('Pelanggan');
             $table->string('password');
-            
-            // --- KOLOM TAMBAHAN UNTUK AIMI PACKAGING ---
-            // Role: Hanya ada 'admin' dan 'pelanggan'. Defaultnya pelanggan.
-            $table->enum('role', ['admin', 'pelanggan'])->default('pelanggan');
-            
-            // No HP: Penting untuk konfirmasi pesanan via WhatsApp
-            $table->string('phone')->nullable();
-            
-            // Alamat: Penting untuk pengiriman paket kemasan
-            $table->text('address')->nullable();
-            // ---------------------------------------------
-
+            $table->string('status')->default('ACTIVE');
             $table->rememberToken();
             $table->timestamps();
         });
-
-        // 2. Tabel Password Reset Tokens (Bawaan Laravel)
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
-
-        // 3. Tabel Sessions (Bawaan Laravel)
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();

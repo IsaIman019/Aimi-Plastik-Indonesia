@@ -8,20 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('kategori', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            
-            // KOLOM INI YANG SEBELUMNYA HILANG/KURANG:
-            $table->string('image')->nullable(); 
-            
+            $table->string('nama');
+            $table->text('deskripsi')->nullable();           
+            $table->string('status')->default('ACTIVE');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('kategori');
     }
 };

@@ -4,17 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Review extends Model
+class Stok extends Model
 {
-    protected $table = 'review';
+    protected $table = 'stok';
     protected $guarded = ['id'];
-    public function pesanan()
-    {
-        return $this->belongsTo(Pesanan::class);
-    }
 
     public function produk()
     {
         return $this->belongsTo(Produk::class);
+    }
+
+    public function isLowStock()
+    {
+        return $this->qty <= $this->min_stock;
     }
 }

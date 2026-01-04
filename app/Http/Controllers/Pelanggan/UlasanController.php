@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\{Review, OrderItem, Product};
 use Illuminate\Http\Request;
 
-class ReviewController extends Controller
+class UlasanController extends Controller
 {
     /**
      * ============================
