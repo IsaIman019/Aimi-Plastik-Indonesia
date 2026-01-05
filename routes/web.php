@@ -43,9 +43,9 @@ use App\Models\Produk;
 
 // Halaman Utama (Welcome)
 Route::get('/', function () {
-    $featuredProducts = Produk::where('is_featured', true)->where('is_active', true)->take(4)->get();
+    $featuredProducts = Produk::where('is_featured', true)->where('status', 'ACTIVE')->take(4)->get();
     $latestNews = collect([]);
-    try { $latestNews = Artikel::where('is_active', true)->latest()->take(3)->get(); } catch (\Exception $e) {}
+    try { $latestNews = Artikel::where('status', 'ACTIVE')->latest()->take(3)->get(); } catch (\Exception $e) {}
 
     return view('welcome', compact('featuredProducts', 'latestNews'));
 })->name('home');
