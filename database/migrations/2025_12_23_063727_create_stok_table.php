@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('stok', function (Blueprint $table) {
             $table->id();
             $table->foreignId('produk_id')
-                  ->constrained()
+                  ->constrained('produk')
                   ->cascadeOnDelete();
             $table->integer('qty');
             $table->timestamps();

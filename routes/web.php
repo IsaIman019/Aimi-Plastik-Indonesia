@@ -34,7 +34,8 @@ use App\Http\Controllers\Pelanggan\CheckoutController;
 use App\Http\Controllers\Pelanggan\OrderController as PelangganOrderController;
 use App\Http\Controllers\Pelanggan\ProfileController;
 use App\Http\Controllers\Pelanggan\AddressController; // (BARU) Controller Alamat
-
+use App\Models\Artikel;
+use App\Models\Produk;
 
 // =================================================================
 // 2. LANDING PAGE & HALAMAN PUBLIK
@@ -42,9 +43,9 @@ use App\Http\Controllers\Pelanggan\AddressController; // (BARU) Controller Alama
 
 // Halaman Utama (Welcome)
 Route::get('/', function () {
-    $featuredProducts = Product::where('is_featured', true)->where('is_active', true)->take(4)->get();
+    $featuredProducts = Produk::where('is_featured', true)->where('is_active', true)->take(4)->get();
     $latestNews = collect([]);
-    try { $latestNews = News::where('is_active', true)->latest()->take(3)->get(); } catch (\Exception $e) {}
+    try { $latestNews = Artikel::where('is_active', true)->latest()->take(3)->get(); } catch (\Exception $e) {}
 
     return view('welcome', compact('featuredProducts', 'latestNews'));
 })->name('home');
