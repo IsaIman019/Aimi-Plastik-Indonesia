@@ -42,9 +42,6 @@ class CategoryController extends Controller
                 return DataTables::of($query)
                     ->addIndexColumn()
                     ->addColumn('action', function ($row) {
-                        $editUrl = route('admin.categories.edit', $row->id);
-                        $deleteUrl = route('admin.categories.destroy', $row->id);
-
                         // Secure output with htmlspecialchars for nama
                         $safeNama = htmlspecialchars($row->nama, ENT_QUOTES, 'UTF-8');
 
@@ -119,7 +116,7 @@ class CategoryController extends Controller
 
         DB::beginTransaction();
         try {
-            // Sanitize input
+
             $nama = htmlspecialchars(strip_tags($request->nama), ENT_QUOTES, 'UTF-8');
             $deskripsi = $request->deskripsi ?
                 htmlspecialchars(strip_tags($request->deskripsi), ENT_QUOTES, 'UTF-8') :
@@ -200,7 +197,6 @@ class CategoryController extends Controller
 
             DB::beginTransaction();
 
-            // Sanitize input
             $nama = htmlspecialchars(strip_tags($request->nama), ENT_QUOTES, 'UTF-8');
             $deskripsi = $request->deskripsi ?
                 htmlspecialchars(strip_tags($request->deskripsi), ENT_QUOTES, 'UTF-8') :
@@ -235,35 +231,45 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         try {
-            $kategori = Kategori::findOrFail($id);
+            $kategori = Kategori::find($id);
+
+            if (!$kategori) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Kategori tidak ditemukan'
+                ], 404);
+            }
 
             DB::beginTransaction();
 
-            // Check if category has products
-            if ($kategori->products()->exists()) {
+            if (method_exists($kategori, 'produk') && $kategori->produk()->exists()) {
+
+                $count = $kategori->produk()->count();
                 return response()->json([
                     'success' => false,
-                    'message' => 'Kategori tidak dapat dihapus karena masih memiliki produk'
+                    'message' => "Kategori tidak dapat dihapus karena masih memiliki {$count} produk"
                 ], 400);
             }
 
+            $nama = $kategori->nama;
             $kategori->delete();
 
             DB::commit();
 
-            Log::info('Kategori deleted', ['id' => $id, 'nama' => $kategori->nama]);
+            Log::info('Kategori deleted', ['id' => $id, 'nama' => $nama]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Kategori berhasil dihapus'
+                'message' => 'Kategori "' . $nama . '" berhasil dihapus'
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error deleting kategori: ' . $e->getMessage());
+            Log::error('Error trace: ' . $e->getTraceAsString());
 
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan saat menghapus kategori'
+                'message' => 'Terjadi kesalahan saat menghapus kategori: ' . $e->getMessage()
             ], 500);
         }
     }
