@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\News;
+use App\Models\Artikel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -12,7 +12,7 @@ class NewsController extends Controller
 {
     public function index()
     {
-        $news = News::latest()->paginate(10);
+        $news = Artikel::latest()->paginate(10);
         return view('admin.news.index', compact('news'));
     }
 
@@ -35,7 +35,7 @@ class NewsController extends Controller
             $imagePath = $request->file('image')->store('news_images', 'public');
         }
 
-        News::create([
+        Artikel::create([
             'title' => $request->title,
             'slug' => Str::slug($request->title),
             'content' => $request->content,
@@ -49,13 +49,13 @@ class NewsController extends Controller
 
     public function edit($id)
     {
-        $news = News::findOrFail($id);
+        $news = Artikel::findOrFail($id);
         return view('admin.news.edit', compact('news'));
     }
 
     public function update(Request $request, $id)
     {
-        $news = News::findOrFail($id);
+        $news = Artikel::findOrFail($id);
 
         $request->validate([
             'title' => 'required|max:255',
@@ -84,7 +84,7 @@ class NewsController extends Controller
 
     public function destroy($id)
     {
-        $news = News::findOrFail($id);
+        $news = Artikel::findOrFail($id);
         if ($news->image) {
             Storage::disk('public')->delete($news->image);
         }
