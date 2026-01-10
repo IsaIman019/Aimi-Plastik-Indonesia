@@ -1,0 +1,86 @@
+@extends('admin.general.wrapper')
+
+@section('render')
+<div class="flex min-h-screen bg-gray-50 font-sans text-gray-800">
+    @include('components.admin-sidebar')
+
+    <div class="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto h-screen">
+        <!-- Header -->
+        <div class="mb-6 lg:mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Master General</h1>
+                    <p class="text-gray-500 text-sm md:text-base mt-1">
+                        Kelola pengaturan umum sistem.
+                    </p>
+                </div>
+
+                <button type="button" onclick="openCreateModal()"
+                    class="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-amber-600 text-white px-5 py-2.5 rounded-lg font-medium shadow-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 4v16m8-8H4"/>
+                    </svg> Tambah General
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter & Search -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
+            <div class="flex flex-col lg:flex-row gap-4">
+                <div class="flex-1">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                            <input type="text" id="searchInput"
+                                class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+                                placeholder="Cari key atau value ...">
+                        </div>
+                </div>
+
+                <select id="statusFilter" class="border rounded-lg px-4 py-2.5 bg-gray-50 border-gray-300">
+                    <option value="">Semua Status</option>
+                    <option value="ACTIVE">ACTIVE</option>
+                    <option value="INACTIVE">INACTIVE</option>
+                </select>
+
+                <button onclick="resetFilters()"
+                    class="px-4 py-2.5 bg-red-100 hover:bg-red-300 border rounded-lg border-gray-300">
+                    Reset Filter
+                </button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table id="generalTable" class="min-w-full divide-y">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-center">NO</th>
+                            <th class="px-4 py-3">KEY</th>
+                            <th class="px-4 py-3">VALUE</th>
+                            <th class="px-4 py-3">DESKRIPSI</th>
+                            <th class="px-4 py-3">STATUS</th>
+                            <th class="px-4 py-3 text-center">AKSI</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+    @include('admin.general.render.create')
+    @include('admin.general.render.edit')
+@push('scripts')
+<script>
+    window.GENERAL_INDEX_URL = "{{ route('admin.general.index') }}";
+</script>
+<script src="{{ asset('assets/js/admin/general/index.js') }}" defer></script>
+@endpush
+@endsection

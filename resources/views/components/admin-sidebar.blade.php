@@ -36,10 +36,22 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         <span>Kelola User</span>
                 </a>
-                <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 {{ request()->routeIs('admin.users*') ? 'bg-orange-50 text-orange-600 font-bold shadow-sm' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <a href="{{ route('admin.general.index') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200
+                    {{ request()->routeIs('admin.general*')
+                            ? 'bg-orange-50 text-orange-600 font-bold shadow-sm'
+                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M11.983 2.25c-.53 0-1.044.196-1.437.552l-.664.602a1.875 1.875 0 01-2.106.297l-.81-.405a1.875 1.875 0 00-2.47.886l-.75 1.5a1.875 1.875 0 00.543 2.317l.693.55a1.875 1.875 0 010 2.92l-.693.55a1.875 1.875 0 00-.543 2.317l.75 1.5a1.875 1.875 0 002.47.886l.81-.405a1.875 1.875 0 012.106.297l.664.602a1.875 1.875 0 002.874 0l.664-.602a1.875 1.875 0 012.106-.297l.81.405a1.875 1.875 0 002.47-.886l.75-1.5a1.875 1.875 0 00-.543-2.317l-.693-.55a1.875 1.875 0 010-2.92l.693-.55a1.875 1.875 0 00.543-2.317l-.75-1.5a1.875 1.875 0 00-2.47-.886l-.81.405a1.875 1.875 0 01-2.106-.297l-.664-.602a1.875 1.875 0 00-1.437-.552z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+
                         <span>General</span>
-                </a>
+                    </a>
             </nav>
         </div>
         <div>

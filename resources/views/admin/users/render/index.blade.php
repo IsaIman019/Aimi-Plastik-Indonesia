@@ -89,7 +89,7 @@
                     <option value="INACTIVE">INACTIVE</option>
                 </select>
                 <button onclick="resetFilters()"
-                            class="px-4 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg font-medium transition hover:shadow-sm whitespace-nowrap">
+                            class="px-4 py-2.5 text-gray-700 bg-red-100 hover:bg-red-300 border border-gray-300 rounded-lg font-medium transition hover:shadow-sm whitespace-nowrap">
                             Reset Filter
                 </button>
             </div>

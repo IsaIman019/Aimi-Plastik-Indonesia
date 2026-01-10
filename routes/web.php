@@ -17,11 +17,12 @@ use App\Models\News;
 
 // B. Controllers Admin
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\GeneralController as AdminGeneralController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
-use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\PromoController as AdminPromoController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\StockController as AdminStockController;
@@ -87,6 +88,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::resource('/users', AdminUserController::class)->names('admin.users');
+    Route::resource('/general', AdminGeneralController::class)->names('admin.general');
+
     Route::resource('/products', AdminProductController::class)->names('admin.products');
 
     Route::resource('/categories', AdminCategoryController::class)
@@ -106,7 +110,6 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     Route::resource('/promos', AdminPromoController::class)->names('admin.promos');
     Route::get('/reports', [AdminReportController::class, 'index'])->name('admin.reports.index');
-    Route::resource('/users', AdminUserController::class)->names('admin.users');
     Route::resource('/news', AdminNewsController::class)->names('admin.news');
 });
 
