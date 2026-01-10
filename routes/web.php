@@ -93,9 +93,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     Route::resource('/products', AdminProductController::class)->names('admin.products');
 
-    Route::resource('/categories', AdminCategoryController::class)
-        ->except(['create', 'show'])
-        ->names('admin.categories');
+    Route::resource('/categories', AdminCategoryController::class)->names('admin.categories');
 
     Route::get('/stock', [AdminStockController::class, 'index'])->name('admin.stock.index');
     Route::post('/stock/update/{id}', [AdminStockController::class, 'update'])->name('admin.stock.update');

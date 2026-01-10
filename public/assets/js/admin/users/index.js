@@ -12,6 +12,7 @@ $(document).ready(function () {
         lengthChange: false,
         info: false,
         paging: true,
+        dom: "rt",
         responsive: false,
         ajax: {
             url: window.USERS_INDEX_URL,

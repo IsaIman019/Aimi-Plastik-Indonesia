@@ -18,34 +18,71 @@
 
                 <!-- KEY -->
                 <div>
-                    <label class="text-sm font-medium">Key</label>
-                    <input id="edit_key" name="key"
-                        class="w-full px-4 py-2 border rounded-xl bg-gray-100" readonly>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Key
+                    </label>
+                    <input
+                        id="edit_key"
+                        name="key"
+                        readonly
+                        class="block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-xl
+                            text-gray-600 cursor-not-allowed">
+                    <p class="mt-1 text-xs text-gray-500">
+                        Key tidak dapat diubah karena digunakan oleh sistem
+                    </p>
                 </div>
 
                 <!-- VALUE -->
-                <div>
-                    <label class="text-sm font-medium">Value</label>
-                    <input id="edit_value" name="value"
-                        class="w-full px-4 py-2 border rounded-xl">
-                    <p id="edit_value-error" class="text-xs text-red-500 hidden"></p>
+               <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Value <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                        id="edit_value"
+                        name="value"
+                        placeholder="Masukkan nilai konfigurasi"
+                        class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                            placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                    <p class="mt-1 text-xs text-gray-500">
+                        Nilai yang akan digunakan oleh sistem
+                    </p>
+                    <div id="edit_value-error" class="mt-1 text-sm text-red-600 hidden"></div>
                 </div>
 
                 <!-- DESCRIPTION -->
                 <div>
-                    <label class="text-sm font-medium">Description</label>
-                    <textarea id="edit_description" name="description"
-                        class="w-full px-4 py-2 border rounded-xl"></textarea>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Deskripsi
+                    </label>
+                    <textarea
+                        id="edit_description"
+                        name="description"
+                        rows="3"
+                        placeholder="Penjelasan singkat mengenai konfigurasi ini..."
+                        class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                            placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500"></textarea>
+                    <p class="mt-1 text-xs text-gray-500">
+                        Opsional, untuk membantu admin memahami fungsi konfigurasi
+                    </p>
                 </div>
 
                 <!-- STATUS -->
                 <div>
-                    <label class="text-sm font-medium">Status</label>
-                    <select id="edit_status" name="status"
-                        class="w-full px-4 py-2 border rounded-xl">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Status <span class="text-red-500">*</span>
+                    </label>
+                    <select
+                        id="edit_status"
+                        name="status"
+                        class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                            focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                         <option value="ACTIVE">ACTIVE</option>
                         <option value="INACTIVE">INACTIVE</option>
                     </select>
+                    <p class="mt-1 text-xs text-gray-500">
+                        Nonaktifkan jika konfigurasi tidak ingin digunakan sementara
+                    </p>
+                    <div id="edit_status-error" class="mt-1 text-sm text-red-600 hidden"></div>
                 </div>
 
                 <!-- FOOTER -->

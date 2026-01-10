@@ -49,7 +49,10 @@
                                 Nama <span class="text-red-500">*</span>
                             </label>
                             <input id="edit_nama" name="nama"
-                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                                placeholder="Contoh: Budi Santoso"
+                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                    placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <p class="mt-1 text-xs text-gray-500">Nama lengkap pengguna</p>
                             <div id="edit_nama-error" class="mt-1 text-sm text-red-600 hidden"></div>
                         </div>
 
@@ -57,15 +60,20 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                             <input id="edit_email" name="email"
-                                class="block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-xl"
+                                placeholder="user@email.com"
+                                class="block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-xl text-gray-500"
                                 readonly>
+                            <p class="mt-1 text-xs text-gray-500">Email tidak dapat diubah</p>
                         </div>
 
                         <!-- PHONE -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">No HP</label>
                             <input id="edit_phone" name="phone"
-                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                                placeholder="08xxxxxxxxxx"
+                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                    placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <p class="mt-1 text-xs text-gray-500">Nomor yang dapat dihubungi</p>
                             <div id="edit_phone-error" class="mt-1 text-sm text-red-600 hidden"></div>
                         </div>
 
@@ -75,8 +83,12 @@
                                 Password (Opsional)
                             </label>
                             <input id="edit_password" name="password" type="password"
-                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                            <p class="text-xs text-gray-500 mt-1">Kosongkan jika tidak ingin mengubah password</p>
+                                placeholder="Kosongkan jika tidak diubah"
+                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                    placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                            <p class="text-xs text-gray-500 mt-1">
+                                Isi hanya jika ingin mengganti password
+                            </p>
                             <div id="edit_password-error" class="mt-1 text-sm text-red-600 hidden"></div>
                         </div>
 
@@ -86,10 +98,13 @@
                                 Role <span class="text-red-500">*</span>
                             </label>
                             <select id="edit_role" name="role"
-                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                    focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                                <option value="" disabled>Pilih Role</option>
                                 <option value="Admin">Admin</option>
                                 <option value="Pelanggan">Pelanggan</option>
                             </select>
+                            <p class="mt-1 text-xs text-gray-500">Tentukan hak akses pengguna</p>
                             <div id="edit_role-error" class="mt-1 text-sm text-red-600 hidden"></div>
                         </div>
 
@@ -99,12 +114,16 @@
                                 Status <span class="text-red-500">*</span>
                             </label>
                             <select id="edit_status" name="status"
-                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                    focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                                <option value="" disabled>Pilih Status</option>
                                 <option value="ACTIVE">ACTIVE</option>
                                 <option value="INACTIVE">INACTIVE</option>
                             </select>
+                            <p class="mt-1 text-xs text-gray-500">Status akun pengguna</p>
                             <div id="edit_status-error" class="mt-1 text-sm text-red-600 hidden"></div>
                         </div>
+
                     </div>
 
                     <!-- FOOTER -->

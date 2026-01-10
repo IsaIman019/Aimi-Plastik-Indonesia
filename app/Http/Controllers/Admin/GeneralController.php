@@ -34,7 +34,7 @@ class GeneralController extends Controller
                     return '
                     <div class="flex justify-center gap-2">
                         <button onclick="editGeneral('.$row->id.')" class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100">✏️</button>
-                        <button onclick="deleteGeneral('.$row->id.', \''.e($row->value).'\')" class="w-8 h-8 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">🗑️</button>
+                        <button onclick="deleteGeneral('.$row->id.', \''.e($row->key).'\')" class="w-8 h-8 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">🗑️</button>
                     </div>';
                 })
                 ->rawColumns(['action'])

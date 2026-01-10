@@ -1,4 +1,4 @@
-<div id="createUserModal" class="fixed inset-0 z-50 hidden">
+<div id="createUserModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen bg-black/50 px-4">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
@@ -31,62 +31,104 @@
 
                     <!-- NAMA -->
                     <div>
-                        <label class="text-sm font-medium text-gray-700">Nama</label>
-                        <div class="relative mt-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Nama <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">👤</span>
                             <input type="text" name="nama"
-                                class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:ring-orange-500 focus:border-orange-500 text-sm">
+                                placeholder="Contoh: Budi Santoso"
+                                class="block w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                    text-gray-900 placeholder-gray-500
+                                    focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                                    transition duration-200 text-sm"
+                                required>
                         </div>
+                        <p class="mt-1 text-xs text-gray-500">Nama lengkap pengguna</p>
                         <p id="create_nama-error" class="text-xs text-red-500 mt-1 hidden"></p>
                     </div>
 
                     <!-- EMAIL -->
                     <div>
-                        <label class="text-sm font-medium text-gray-700">Email</label>
-                        <div class="relative mt-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Email <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">✉️</span>
                             <input type="email" name="email"
-                                class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:ring-orange-500 focus:border-orange-500 text-sm">
+                                placeholder="Contoh: user@email.com"
+                                class="block w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                    text-gray-900 placeholder-gray-500
+                                    focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                                    transition duration-200 text-sm"
+                                required>
                         </div>
+                        <p class="mt-1 text-xs text-gray-500">Digunakan untuk login dan notifikasi</p>
                         <p id="create_email-error" class="text-xs text-red-500 mt-1 hidden"></p>
                     </div>
 
-                    <!-- PHONE -->
+                    <!-- NO HP -->
                     <div>
-                        <label class="text-sm font-medium text-gray-700">No HP</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            No. HP
+                        </label>
                         <input type="text" name="phone"
-                            class="w-full mt-1 px-4 py-2 border border-gray-200 rounded-xl focus:ring-orange-500 focus:border-orange-500 text-sm">
+                            placeholder="Contoh: 081234567890"
+                            class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                text-gray-900 placeholder-gray-500
+                                focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                                transition duration-200 text-sm">
+                        <p class="mt-1 text-xs text-gray-500">Nomor aktif yang bisa dihubungi (opsional)</p>
                     </div>
 
                     <!-- PASSWORD -->
                     <div>
-                        <label class="text-sm font-medium text-gray-700">Password</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Password <span class="text-red-500">*</span>
+                        </label>
                         <input type="password" name="password"
-                            class="w-full mt-1 px-4 py-2 border border-gray-200 rounded-xl focus:ring-orange-500 focus:border-orange-500 text-sm">
+                            placeholder="Minimal 8 karakter"
+                            class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                text-gray-900 placeholder-gray-500
+                                focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                                transition duration-200 text-sm"
+                            required>
+                        <p class="mt-1 text-xs text-gray-500">Gunakan kombinasi huruf dan angka</p>
                         <p id="create_password-error" class="text-xs text-red-500 mt-1 hidden"></p>
                     </div>
 
                     <!-- ROLE -->
                     <div>
-                        <label class="text-sm font-medium text-gray-700">Role</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Role <span class="text-red-500">*</span>
+                        </label>
                         <select name="role"
-                            class="w-full mt-1 px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-orange-500 focus:border-orange-500">
-                            <option value="">Pilih Role</option>
+                            class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                                transition duration-200 text-sm">
+                            <option value="" disabled selected>Pilih Role</option>
                             <option value="Admin">Admin</option>
                             <option value="Pelanggan">Pelanggan</option>
                         </select>
+                        <p class="mt-1 text-xs text-gray-500">Menentukan hak akses pengguna</p>
                         <p id="create_role-error" class="text-xs text-red-500 mt-1 hidden"></p>
                     </div>
 
                     <!-- STATUS -->
                     <div>
-                        <label class="text-sm font-medium text-gray-700">Status</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Status
+                        </label>
                         <select name="status"
-                            class="w-full mt-1 px-4 py-2 border border-gray-200 rounded-xl text-sm focus:ring-orange-500 focus:border-orange-500">
+                            class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+                                transition duration-200 text-sm">
                             <option value="ACTIVE">ACTIVE</option>
                             <option value="INACTIVE">INACTIVE</option>
                         </select>
+                        <p class="mt-1 text-xs text-gray-500">Nonaktifkan jika user tidak boleh login</p>
                     </div>
+
 
                     <!-- FOOTER -->
                     <div class="flex justify-end gap-3 pt-4">

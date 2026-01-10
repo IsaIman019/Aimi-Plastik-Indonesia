@@ -5,7 +5,7 @@ $(document).ready(function () {
         },
     });
 
-    var table = $("#generalTable").DataTable({
+    var table = $("#kategoriTable").DataTable({
         processing: true,
         serverSide: true,
         searching: false,
@@ -15,7 +15,7 @@ $(document).ready(function () {
         dom: "rt",
         responsive: false,
         ajax: {
-            url: window.GENERAL_INDEX_URL,
+            url: window.KATEGORI_INDEX_URL,
             data: function (d) {
                 d.search = $("#searchInput").val();
                 d.status = $("#statusFilter").val();
@@ -32,10 +32,9 @@ $(document).ready(function () {
         },
         columns: [
             { data: "DT_RowIndex", orderable: false, className: "text-center" },
-            { data: "key" },
-            { data: "value" },
+            { data: "nama" },
             {
-                data: "description",
+                data: "deskripsi",
                 render: (d) => d ?? "-",
             },
             {
@@ -119,7 +118,7 @@ $(document).ready(function () {
         );
     }
 
-    $("#searchInput, #statusFilter").on("change keyup", function () {
+    $("#searchInput, #statusFilter").on("keyup change", function () {
         table.draw();
     });
 
@@ -128,17 +127,18 @@ $(document).ready(function () {
         $("#statusFilter").val("");
         table.draw();
     };
-    window.reloadGeneralTable = function () {
-        if ($("#generalTable").DataTable()) {
-            $("#generalTable").DataTable().ajax.reload(null, false);
+
+    window.reloadKategoriTable = function () {
+        if ($("#kategoriTable").DataTable()) {
+            $("#kategoriTable").DataTable().ajax.reload(null, false);
         }
     };
 });
-window.editGeneral = async function (id) {
+window.editKategori = async function (id) {
     // console.log("EDIT DIKLIK, ID:", id);
 
     try {
-        const response = await axios.get(`/admin/general/${id}/edit`);
+        const response = await axios.get(`/admin/categories/${id}/edit`);
 
         if (window.openEditModal) {
             window.openEditModal(response.data.data || response.data);
@@ -149,13 +149,13 @@ window.editGeneral = async function (id) {
         console.error(error);
     }
 };
-window.deleteGeneral = function (id, value) {
+window.deleteKategori = function (id, nama) {
     Swal.fire({
-        title: "Hapus General?",
+        title: "Hapus Kategori?",
         html: `
             <div class="text-left">
                 <p class="text-gray-600 mb-3">
-                    Data General <strong>"${value}"</strong> akan dihapus permanen.
+                    Kategori <strong>"${nama}"</strong> akan dihapus permanen.
                 </p>
             </div>
         `,
@@ -171,17 +171,18 @@ window.deleteGeneral = function (id, value) {
 
         preConfirm: async () => {
             try {
-                const response = await axios.delete(`/admin/general/${id}`);
+                const response = await axios.delete(`/admin/categories/${id}`);
 
                 if (!response.data || response.data.success === false) {
                     throw new Error(
-                        response.data?.message || "Gagal menghapus data general"
+                        response.data?.message ||
+                            "Gagal menghapus data kategori"
                     );
                 }
 
                 return response.data;
             } catch (error) {
-                let errorMessage = "Gagal menghapus data general";
+                let errorMessage = "Gagal menghapus data kategori";
 
                 if (error.response?.data?.message) {
                     errorMessage = error.response.data.message;
@@ -195,14 +196,15 @@ window.deleteGeneral = function (id, value) {
             Swal.fire({
                 toast: true,
                 icon: "success",
-                title: result.value?.message || "Data General berhasil dihapus",
+                title:
+                    result.value?.message || "Data Kategori berhasil dihapus",
                 position: "top-end",
                 showConfirmButton: false,
                 timer: 2500,
             });
 
-            if (window.reloadGeneralTable) {
-                reloadGeneralTable();
+            if (window.reloadKategoriTable) {
+                reloadKategoriTable();
             }
         }
     });
