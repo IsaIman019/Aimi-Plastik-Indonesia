@@ -2,7 +2,8 @@
     <div class="flex items-center justify-center min-h-screen bg-black/50 px-4">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-            <div class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div
+            class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
 
             <!-- HEADER -->
             <div class="px-6 py-4 bg-gradient-to-r from-orange-50 to-amber-50 flex justify-between">
@@ -21,11 +22,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Key
                     </label>
-                    <input
-                        id="edit_key"
-                        name="key"
-                        readonly
-                        class="block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-xl
+                    <input id="edit_key" name="key" readonly class="block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-xl
                             text-gray-600 cursor-not-allowed">
                     <p class="mt-1 text-xs text-gray-500">
                         Key tidak dapat diubah karena digunakan oleh sistem
@@ -33,15 +30,11 @@
                 </div>
 
                 <!-- VALUE -->
-               <div>
+                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Value <span class="text-red-500">*</span>
                     </label>
-                    <input
-                        id="edit_value"
-                        name="value"
-                        placeholder="Masukkan nilai konfigurasi"
-                        class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                    <input id="edit_value" name="value" placeholder="Masukkan nilai konfigurasi" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
                             placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                     <p class="mt-1 text-xs text-gray-500">
                         Nilai yang akan digunakan oleh sistem
@@ -54,10 +47,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Deskripsi
                     </label>
-                    <textarea
-                        id="edit_description"
-                        name="description"
-                        rows="3"
+                    <textarea id="edit_description" name="description" rows="3"
                         placeholder="Penjelasan singkat mengenai konfigurasi ini..."
                         class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
                             placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500"></textarea>
@@ -71,10 +61,7 @@
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Status <span class="text-red-500">*</span>
                     </label>
-                    <select
-                        id="edit_status"
-                        name="status"
-                        class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                    <select id="edit_status" name="status" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
                             focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                         <option value="ACTIVE">ACTIVE</option>
                         <option value="INACTIVE">INACTIVE</option>
@@ -100,7 +87,7 @@
 
 @push('scripts')
 <script>
-    window.GENERAL_UPDATE_URL = "{{ route('admin.general.update', ':id') }}";
+window.GENERAL_UPDATE_URL = "{{ route('admin.general.update', ':id') }}";
 </script>
 <script src="{{ asset('assets/js/admin/general/edit.js') }}" defer></script>
 @endpush

@@ -5,6 +5,5 @@
 @endpush
 
 @section('content')
-    @yield('render')
+@yield('render')
 @endsection
-

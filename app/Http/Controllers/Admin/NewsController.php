@@ -2,93 +2,175 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Artikel;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $news = Artikel::latest()->paginate(10);
-        return view('admin.news.index', compact('news'));
+        if ($request->ajax()) {
+
+            $query = Artikel::query();
+
+            if ($request->search) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('judul', 'like', "%{$request->search}%")
+                        ->orWhere('konten', 'like', "%{$request->search}%");
+                });
+            }
+
+            if ($request->filled('status')) {
+                $query->where('status', $request->status);
+            }
+
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    return '
+                    <div class="flex justify-center gap-2">
+                        <button onclick="editNews(' . $row->id . ')" class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100">✏️</button>
+                        <button onclick="deleteNews(' . $row->id . ', \'' . e($row->key) . '\')" class="w-8 h-8 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">🗑️</button>
+                    </div>';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        $kategori = Kategori::all();
+        return view('admin.news.render.index', compact('kategori'));
     }
 
-    public function create()
-    {
-        return view('admin.news.create');
-    }
 
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'category' => 'required'
+            'judul' => 'required|max:100',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'kategori_id' => 'required',
+            'konten' => 'required|max:255',
+            'status' => 'required|in:DRAFT,ACTIVE,INACTIVE',
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('news_images', 'public');
+        $gambarPath = null;
+        if ($request->hasFile('gambar')) {
+            // Validasi ukuran file
+            $file = $request->file('gambar');
+            if ($file->getSize() > 2097152) { // 2MB dalam bytes
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ukuran gambar maksimal 2MB',
+                    'errors' => ['gambar' => ['Ukuran gambar maksimal 2MB']]
+                ], 422);
+            }
+
+            // Generate nama file unik
+            $gambarName = 'artikel_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            // Simpan file ke storage/app/public/artikel
+            $gambarPath = $file->storeAs('artikel', $gambarName, 'public');
         }
 
         Artikel::create([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'content' => $request->content,
-            'category' => $request->category,
-            'image' => $imagePath,
-            'is_active' => true
+            'judul' => $request->judul,
+            'gambar' => $gambarPath,
+            'kategori_id' => $request->kategori_id,
+            'konten' => $request->konten,
+            'status' => $request->status
         ]);
 
-        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil diterbitkan.');
+        return response()->json([
+            'success' => true,
+            'message' => 'News berhasil ditambahkan'
+        ]);
     }
 
     public function edit($id)
     {
         $news = Artikel::findOrFail($id);
-        return view('admin.news.edit', compact('news'));
+
+        return response()->json([
+            'success' => true,
+            'data' => $news
+        ]);
     }
 
     public function update(Request $request, $id)
     {
         $news = Artikel::findOrFail($id);
 
-        $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        $validated = $request->validate([
+            'judul' => 'required|max:100',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'kategori_id' => 'required',
+            'konten' => 'required|max:255',
+            'status' => 'required|in:DRAFT,ACTIVE,INACTIVE',
         ]);
 
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('gambar')) {
             // Hapus gambar lama jika ada
-            if ($news->image) {
-                Storage::disk('public')->delete($news->image);
+            if ($news->gambar) {
+                Storage::disk('public')->delete($news->gambar);
             }
-            $news->image = $request->file('image')->store('news_images', 'public');
+            $news->gambar = $request->file('gambar')->store('news', 'public');
         }
 
-        $news->update([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'content' => $request->content,
-            'category' => $request->category,
-            // Image diupdate logic diatas
-        ]);
+        $news->update($validated);
 
-        return redirect()->route('admin.news.index')->with('success', 'Berita berhasil diupdate.');
+        return response()->json([
+            'success' => true,
+            'message' => 'News berhasil diperbarui'
+        ]);
     }
 
     public function destroy($id)
     {
-        $news = Artikel::findOrFail($id);
-        if ($news->image) {
-            Storage::disk('public')->delete($news->image);
+        try {
+            $news = Artikel::find($id);
+
+            if (!$news) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'News tidak ditemukan'
+                ], 404);
+            }
+
+            DB::beginTransaction();
+            if ($news->image) {
+                Storage::disk('public')->delete($news->image);
+            }
+
+            $judul = $news->judul;
+            $news->delete();
+
+            DB::commit();
+
+            Log::info('News deleted', [
+                'id' => $id,
+                'judul' => $judul
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'News "' . $judul . '" berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Log::error('Error deleting general', [
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menghapus data general'
+            ], 500);
         }
-        $news->delete();
-        return back()->with('success', 'Berita dihapus.');
     }
 }
