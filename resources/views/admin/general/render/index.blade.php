@@ -24,9 +24,42 @@
                 </button>
             </div>
         </div>
+        @if(session('success'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: '{{ session('
+                        success ') }}',
+                        timer: 3000,
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top-end'
+                    });
+                });
+            </script>
+            @endif
+             @if(session('error'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: '{{ session('
+                        error ') }}',
+                        timer: 3000,
+                        showConfirmButton: false,
+                        toast: true,
+                        position: 'top-end'
+                    });
+                });
+            </script>
+            @endif
 
         <!-- Filter & Search -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
+            
             <div class="flex flex-col lg:flex-row gap-4">
                 <div class="flex-1">
                     <div class="relative">
@@ -57,6 +90,26 @@
 
         <!-- Table -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div
+                    class="px-4 py-3 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <div class="text-sm text-gray-700">
+                        <label class="flex items-center gap-2">
+                            <span>Tampilkan</span>
+                            <select id="pageLength"
+                                class="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-orange-500">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="-1">Semua</option>
+                            </select>
+                            <span>data</span>
+                        </label>
+                    </div>
+                    <div class="text-sm text-gray-500" id="tableInfoTop">
+                        Total: <span class="font-semibold">0</span> data
+                    </div>
+                </div>
             <div class="overflow-x-auto">
                 <table id="generalTable" class="min-w-full divide-y">
                     <thead class="bg-gray-50">
@@ -69,9 +122,20 @@
                             <th class="px-4 py-3 text-center">AKSI</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody class="bg-white divide-y divide-gray-200"></tbody>
                 </table>
             </div>
+            <div class="bg-gray-50 px-4 py-3 border-t border-gray-200">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="text-sm text-gray-700" id="tableInfo">
+                            Menampilkan <span class="font-semibold">0</span> sampai <span class="font-semibold">0</span>
+                            dari <span class="font-semibold">0</span> data
+                        </div>
+                        <div class="flex items-center space-x-1" id="paginationContainer">
+                            <!-- Pagination akan diisi manual -->
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
 </div>
