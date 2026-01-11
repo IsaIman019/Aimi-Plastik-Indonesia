@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 // A. Auth & Public
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PublicBlogController;
+use App\Http\Controllers\PublicArtikelController;
 use App\Http\Controllers\Pelanggan\CallbackController;
 use App\Models\Product;
 use App\Models\News;
@@ -60,8 +60,8 @@ Route::get('/tentang-kami', function () {
 })->name('about');
 
 // HALAMAN BLOG & BERITA
-Route::get('/blog', [PublicBlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/{id}', [PublicBlogController::class, 'show'])->name('blog.show');
+Route::get('/artikel', [PublicArtikelController::class, 'index'])->name('artikel.index');
+Route::get('/artikel/{id}', [PublicArtikelController::class, 'show'])->name('artikel.show');
 
 // MIDTRANS CALLBACK (Wajib Public)
 Route::post('/midtrans-callback', [CallbackController::class, 'callback']);

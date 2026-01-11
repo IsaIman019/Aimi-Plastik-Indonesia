@@ -87,7 +87,7 @@
 
 @push('scripts')
 <script>
-window.GENERAL_UPDATE_URL = "{{ route('admin.general.update', ':id') }}";
+    window.GENERAL_UPDATE_URL = "{{ route('admin.general.update', ':id') }}";
 </script>
 <script src="{{ asset('assets/js/admin/general/edit.js') }}" defer></script>
 @endpush

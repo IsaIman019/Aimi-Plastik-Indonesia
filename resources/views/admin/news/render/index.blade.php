@@ -100,7 +100,7 @@
                                 AKSI</th>
                         </tr>
                     </thead>
-                    <tbody class="">
+                    <tbody class="bg-white divide-y divide-gray-200">
                         <!-- Data akan diisi oleh DataTables -->
                     </tbody>
                 </table>

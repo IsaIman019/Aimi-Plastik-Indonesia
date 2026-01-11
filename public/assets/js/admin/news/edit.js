@@ -1,24 +1,18 @@
 window.openEditModal = function (data) {
-    console.log("Opening edit modal with data:", data);
-
-    // Reset form
     $("#editNewsForm")[0].reset();
     $("#editImagePreview").addClass("hidden");
     $("[id^=edit_][id$=-error]").addClass("hidden").text("");
 
-    // Simpan data gambar saat ini di variable global
     window.currentEditImage = data.gambar || null;
 
-    // Isi data
     $("#edit_id").val(data.id);
     $("#edit_judul").val(data.judul);
     $("#edit_kategori_id").val(data.kategori_id);
     $("#edit_konten").val(data.konten);
     $("#edit_status").val(data.status);
 
-    // Tampilkan gambar saat ini jika ada
     const currentImageDiv = $("#editCurrentImage");
-    currentImageDiv.empty(); // Kosongkan dulu
+    currentImageDiv.empty();
 
     if (data.gambar) {
         const imageUrl = data.gambar.startsWith("http")
@@ -62,11 +56,8 @@ window.openEditModal = function (data) {
 
     $("#editNewsModal").removeClass("hidden");
     $("body").css("overflow", "hidden");
-
-    console.log("Modal should be visible now");
 };
 
-// Preview gambar baru di modal edit
 $(document).on("change", "#edit_gambar", function (e) {
     const file = this.files[0];
     const preview = $("#editImagePreview");
@@ -74,7 +65,6 @@ $(document).on("change", "#edit_gambar", function (e) {
     const currentImageContainer = $("#currentImageContainer");
 
     if (file) {
-        // Validasi ukuran (2MB)
         if (file.size > 2097152) {
             Swal.fire({
                 icon: "error",
@@ -89,7 +79,6 @@ $(document).on("change", "#edit_gambar", function (e) {
             return;
         }
 
-        // Validasi tipe file
         const validTypes = [
             "image/jpeg",
             "image/png",
@@ -111,7 +100,6 @@ $(document).on("change", "#edit_gambar", function (e) {
             return;
         }
 
-        // Tampilkan preview
         const reader = new FileReader();
         reader.onload = function (e) {
             previewImg.attr("src", e.target.result);
@@ -119,7 +107,6 @@ $(document).on("change", "#edit_gambar", function (e) {
 
             // Sembunyikan/sorot gambar lama
             if (currentImageContainer.length) {
-                // Tambahkan class untuk menunjukkan gambar akan diganti
                 $("#editCurrentImageDisplay").addClass("opacity-50");
                 $("#currentImageNote").html(`
                     <span class="text-amber-600 font-medium">⚠ Gambar akan diganti</span>
@@ -128,7 +115,6 @@ $(document).on("change", "#edit_gambar", function (e) {
                     </span>
                 `);
 
-                // Tambahkan pesan warning
                 if (!$("#imageChangeWarning").length) {
                     currentImageContainer.append(`
                         <div id="imageChangeWarning" class="mt-2 p-2 bg-amber-50 border border-amber-200 rounded">
@@ -204,7 +190,7 @@ $("#editNewsForm").on("submit", function (e) {
     }
 
     const formData = new FormData(this);
-    formData.append("_method", "PUT"); // Untuk Laravel method spoofing
+    formData.append("_method", "PUT");
 
     // Debug: log FormData contents
     console.log("FormData entries:");

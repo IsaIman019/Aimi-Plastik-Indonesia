@@ -60,7 +60,7 @@ class NewsController extends Controller
 
         $gambarPath = null;
         if ($request->hasFile('gambar')) {
-            // Validasi ukuran file
+
             $file = $request->file('gambar');
             if ($file->getSize() > 2097152) { // 2MB dalam bytes
                 return response()->json([
@@ -70,10 +70,10 @@ class NewsController extends Controller
                 ], 422);
             }
 
-            // Generate nama file unik
+
             $gambarName = 'artikel_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            // Simpan file ke storage/app/public/artikel
+
             $gambarPath = $file->storeAs('artikel', $gambarName, 'public');
         }
 
@@ -114,18 +114,27 @@ class NewsController extends Controller
         ]);
 
         if ($request->hasFile('gambar')) {
-            // Hapus gambar lama jika ada
+
             if ($news->gambar) {
                 Storage::disk('public')->delete($news->gambar);
             }
-            $news->gambar = $request->file('gambar')->store('news', 'public');
+
+            $gambarName = 'artikel_' . time() . '_' . uniqid() . '.' . $request->file('gambar')->getClientOriginalExtension();
+
+            $gambarPath = $request->file('gambar')->storeAs('artikel', $gambarName, 'public');
+
+            $validated['gambar'] = $gambarPath;
+        } else {
+            $validated['gambar'] = $news->gambar;
         }
+
 
         $news->update($validated);
 
         return response()->json([
             'success' => true,
-            'message' => 'News berhasil diperbarui'
+            'message' => 'News berhasil diperbarui',
+            'data' => $news
         ]);
     }
 
