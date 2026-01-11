@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class PesananController extends Controller
 {
     /**
      * Menampilkan daftar semua pesanan masuk.

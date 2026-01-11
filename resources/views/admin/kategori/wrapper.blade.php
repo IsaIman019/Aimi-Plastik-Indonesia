@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Kategori Produk')
 @push('styles')
-<link href="{{ asset('assets/css/admin/categories/styles.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/css/admin/kategori/styles.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')

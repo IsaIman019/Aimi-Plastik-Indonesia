@@ -9,7 +9,7 @@
         <div class="mb-6 lg:mb-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Kategori Produk</h1>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Manajemen Kategori Produk</h1>
                     <p class="text-gray-500 text-sm md:text-base mt-1">
                         Kelola kategori produk.
                     </p>
@@ -107,12 +107,12 @@
         </div>
     </div>
 </div>
-    @include('admin.categories.render.create')
-    @include('admin.categories.render.edit')
+    @include('admin.kategori.render.create')
+    @include('admin.kategori.render.edit')
 @push('scripts')
 <script>
-    window.KATEGORI_INDEX_URL = "{{ route('admin.categories.index') }}";
+    window.KATEGORI_INDEX_URL = "{{ route('admin.kategori.index') }}";
 </script>
-<script src="{{ asset('assets/js/admin/categories/index.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin/kategori/index.js') }}" defer></script>
 @endpush
 @endsection

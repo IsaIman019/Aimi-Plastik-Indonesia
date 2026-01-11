@@ -32,7 +32,7 @@
                     <input
                         type="text"
                         name="nama"
-                        placeholder="Contoh: Makanan Ringan"
+                        placeholder="Contoh: Lakban, Bubble Wrap, Dus Karton, dll."
                         class="w-full mt-1 px-4 py-2 bg-gray-50 border border-gray-300 rounded-xl
                             text-sm placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
                     <p class="mt-1 text-xs text-gray-500">
@@ -90,7 +90,7 @@
 
 @push('scripts')
 <script>
-    window.KATEGORI_STORE_URL = "{{ route('admin.categories.store') }}";
+    window.KATEGORI_STORE_URL = "{{ route('admin.kategori.store') }}";
 </script>
-<script src="{{ asset('assets/js/admin/categories/create.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin/kategori/create.js') }}" defer></script>
 @endpush
