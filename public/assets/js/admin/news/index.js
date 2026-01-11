@@ -192,6 +192,7 @@ window.editNews = async function (id) {
         console.error(error);
     }
 };
+
 window.deleteNews = function (id, value) {
     Swal.fire({
         title: "Hapus News?",

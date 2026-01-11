@@ -36,7 +36,7 @@ class NewsController extends Controller
                     return '
                     <div class="flex justify-center gap-2">
                         <button onclick="editNews(' . $row->id . ')" class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100">✏️</button>
-                        <button onclick="deleteNews(' . $row->id . ', \'' . e($row->key) . '\')" class="w-8 h-8 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">🗑️</button>
+                        <button onclick="deleteNews(' . $row->id . ', \'' . e($row->judul) . '\')" class="w-8 h-8 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">🗑️</button>
                     </div>';
                 })
                 ->rawColumns(['action'])
@@ -163,13 +163,13 @@ class NewsController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
 
-            Log::error('Error deleting general', [
+            Log::error('Error deleting news', [
                 'error' => $e->getMessage()
             ]);
 
             return response()->json([
                 'success' => false,
-                'message' => 'Terjadi kesalahan saat menghapus data general'
+                'message' => 'Terjadi kesalahan saat menghapus data news'
             ], 500);
         }
     }

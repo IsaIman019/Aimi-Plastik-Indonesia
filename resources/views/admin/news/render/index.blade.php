@@ -1,4 +1,4 @@
-@extends('admin.general.wrapper')
+@extends('admin.news.wrapper')
 
 @section('render')
 <div class="flex min-h-screen bg-gray-50 font-sans text-gray-800">
@@ -121,7 +121,7 @@
     </div>
 </div>
 @include('admin.news.render.create')
-<!-- @include('admin.news.render.edit') -->
+@include('admin.news.render.edit')
 @push('scripts')
 <script>
     window.NEWS_INDEX_URL = "{{ route('admin.news.index') }}";

@@ -7,7 +7,7 @@
 
             <!-- HEADER -->
             <div class="px-6 py-4 bg-gradient-to-r from-orange-50 to-amber-50 flex justify-between">
-                <h3 class="text-lg font-bold">Edit General</h3>
+                <h3 class="text-lg font-bold">Edit News</h3>
                 <button onclick="closeEditNewsModal()">✕</button>
             </div>
 
@@ -113,11 +113,9 @@
                 </div>
 
                 <!-- FOOTER -->
-                <!-- FOOTER -->
                 <div class="flex justify-end gap-3 pt-4">
                     <button type="button" onclick="closeEditNewsModal()">Batal</button>
-                    <button id="editGeneralSubmitBtn" type="submit"
-                        class="px-5 py-2 bg-orange-500 text-white rounded-xl">
+                    <button id="editNewsSubmitBtn" type="submit" class="px-5 py-2 bg-orange-500 text-white rounded-xl">
                         Simpan
                     </button>
                 </div>
