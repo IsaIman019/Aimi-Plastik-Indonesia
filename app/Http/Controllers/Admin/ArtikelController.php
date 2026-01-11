@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 
-class NewsController extends Controller
+class ArtikelController extends Controller
 {
     public function index(Request $request)
     {

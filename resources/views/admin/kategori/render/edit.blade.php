@@ -78,7 +78,7 @@
 
 @push('scripts')
 <script>
-    window.KATEGORI_UPDATE_URL = "{{ route('admin.categories.update', ':id') }}";
+    window.KATEGORI_UPDATE_URL = "{{ route('admin.kategori.update', ':id') }}";
 </script>
-<script src="{{ asset('assets/js/admin/categories/edit.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin/kategori/edit.js') }}" defer></script>
 @endpush

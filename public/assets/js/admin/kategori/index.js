@@ -138,7 +138,7 @@ window.editKategori = async function (id) {
     // console.log("EDIT DIKLIK, ID:", id);
 
     try {
-        const response = await axios.get(`/admin/categories/${id}/edit`);
+        const response = await axios.get(`/admin/kategori/${id}/edit`);
 
         if (window.openEditModal) {
             window.openEditModal(response.data.data || response.data);
@@ -171,7 +171,7 @@ window.deleteKategori = function (id, nama) {
 
         preConfirm: async () => {
             try {
-                const response = await axios.delete(`/admin/categories/${id}`);
+                const response = await axios.delete(`/admin/kategori/${id}`);
 
                 if (!response.data || response.data.success === false) {
                     throw new Error(

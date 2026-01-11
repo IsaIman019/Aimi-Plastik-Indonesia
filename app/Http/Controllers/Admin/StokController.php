@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-class StockController extends Controller
+class StokController extends Controller
 {
     // 1. TAMPILKAN HALAMAN MANAJEMEN STOK
     public function index()

@@ -5,16 +5,60 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str; // <--- 1. WAJIB TAMBAHKAN INI
+use Yajra\DataTables\DataTables;
 
-class ProductController extends Controller
+class ProdukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category')->latest()->paginate(10);
-        return view('admin.products.index', compact('products'));
+        if ($request->ajax()) {
+
+            $query = Produk::with(['kategori', 'varian']);
+
+            if ($request->search) {
+                $query->where('nama', 'like', "%{$request->search}%");
+            }
+
+            if ($request->filled('status')) {
+                $query->where('status', $request->status);
+            }
+
+            if ($request->filled('kategori_id')) {
+                $query->where('kategori_id', $request->kategori_id);
+            }
+
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->addColumn('kategori', fn ($row) =>
+                    $row->kategori?->nama ?? '-'
+                )
+                ->addColumn('harga', fn ($row) =>
+                    'Rp ' . number_format($row->harga, 0, ',', '.')
+                )
+                ->addColumn('stok', fn ($row) =>
+                    $row->stok . ' Pcs'
+                )
+                ->addColumn('status', fn ($row) => $row->status)
+                ->addColumn('action', function ($row) {
+                    return '
+                    <div class="flex justify-center gap-2">
+                        <a href="'.route('admin.products.edit', $row->id).'"
+                            class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 flex items-center justify-center">✏️</a>
+                        <button onclick="deleteProduct('.$row->id.', \''.e($row->nama).'\')"
+                            class="w-8 h-8 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">🗑️</button>
+                    </div>';
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        $produk = Produk::with('kategori')->latest()->paginate(10);
+
+        return view('admin.produk.render.index', compact('produk'));
     }
 
     public function create()
