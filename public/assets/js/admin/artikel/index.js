@@ -181,7 +181,7 @@ window.editNews = async function (id) {
     // console.log("EDIT DIKLIK, ID:", id);
 
     try {
-        const response = await axios.get(`/admin/news/${id}/edit`);
+        const response = await axios.get(`/admin/artikel/${id}/edit`);
 
         if (window.openEditModal) {
             window.openEditModal(response.data.data || response.data);
@@ -215,7 +215,7 @@ window.deleteNews = function (id, value) {
 
         preConfirm: async () => {
             try {
-                const response = await axios.delete(`/admin/news/${id}`);
+                const response = await axios.delete(`/admin/artikel/${id}`);
 
                 if (!response.data || response.data.success === false) {
                     throw new Error(

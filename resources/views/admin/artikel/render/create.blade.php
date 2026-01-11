@@ -126,7 +126,7 @@
 
 @push('scripts')
 <script>
-    window.NEWS_STORE_URL = "{{ route('admin.news.store') }}";
+    window.NEWS_STORE_URL = "{{ route('admin.artikel.store') }}";
 </script>
-<script src="{{ asset('assets/js/admin/news/create.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin/artikel/create.js') }}" defer></script>
 @endpush

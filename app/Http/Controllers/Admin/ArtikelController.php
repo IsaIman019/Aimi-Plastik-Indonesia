@@ -44,7 +44,7 @@ class ArtikelController extends Controller
         }
 
         $kategori = Kategori::all();
-        return view('admin.news.render.index', compact('kategori'));
+        return view('admin.artikel.render.index', compact('kategori'));
     }
 
 

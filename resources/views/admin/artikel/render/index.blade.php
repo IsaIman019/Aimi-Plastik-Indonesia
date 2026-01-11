@@ -1,4 +1,4 @@
-@extends('admin.news.wrapper')
+@extends('admin.artikel.wrapper')
 
 @section('render')
 <div class="flex min-h-screen bg-gray-50 font-sans text-gray-800">
@@ -9,7 +9,7 @@
         <div class="mb-6 lg:mb-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Master News</h1>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Master Berita</h1>
                     <p class="text-gray-500 text-sm md:text-base mt-1">
                         Kelola berita dan artikel sistem.
                     </p>
@@ -20,7 +20,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    Tambah News
+                    Tambah Artikel
                 </button>
             </div>
         </div>
@@ -120,12 +120,12 @@
         </div>
     </div>
 </div>
-@include('admin.news.render.create')
-@include('admin.news.render.edit')
+@include('admin.artikel.render.create')
+@include('admin.artikel.render.edit')
 @push('scripts')
 <script>
-    window.NEWS_INDEX_URL = "{{ route('admin.news.index') }}";
+    window.NEWS_INDEX_URL = "{{ route('admin.artikel.index') }}";
 </script>
-<script src="{{ asset('assets/js/admin/news/index.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin/artikel/index.js') }}" defer></script>
 @endpush
 @endsection

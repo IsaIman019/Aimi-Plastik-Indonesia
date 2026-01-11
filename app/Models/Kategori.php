@@ -37,4 +37,20 @@ class Kategori extends Model
                 ->orWhere('deskripsi', 'like', "%{$search}%");
         });
     }
+
+    /**
+     * Get the articles for the category
+     */
+    public function articles()
+    {
+        return $this->hasMany(Artikel::class, 'kategori_id');
+    }
+
+    /**
+     * Alias untuk articles (jika ada kode yang memanggil artikel())
+     */
+    public function artikel()
+    {
+        return $this->hasMany(Artikel::class, 'kategori_id');
+    }
 }

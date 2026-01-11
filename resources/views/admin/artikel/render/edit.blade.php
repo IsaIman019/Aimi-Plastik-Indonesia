@@ -7,7 +7,7 @@
 
             <!-- HEADER -->
             <div class="px-6 py-4 bg-gradient-to-r from-orange-50 to-amber-50 flex justify-between">
-                <h3 class="text-lg font-bold">Edit News</h3>
+                <h3 class="text-lg font-bold">Edit Artikel</h3>
                 <button onclick="closeEditNewsModal()">✕</button>
             </div>
 
@@ -126,7 +126,7 @@
 
 @push('scripts')
 <script>
-    window.NEWS_UPDATE_URL = "{{ route('admin.news.update', ':id') }}";
+    window.NEWS_UPDATE_URL = "{{ route('admin.artikel.update', ':id') }}";
 </script>
-<script src="{{ asset('assets/js/admin/news/edit.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin/artikel/edit.js') }}" defer></script>
 @endpush

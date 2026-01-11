@@ -60,6 +60,7 @@ Route::get('/tentang-kami', function () {
 // HALAMAN BLOG & BERITA
 Route::get('/artikel', [PublicArtikelController::class, 'index'])->name('artikel.index');
 Route::get('/artikel/{id}', [PublicArtikelController::class, 'show'])->name('artikel.show');
+Route::get('/artikel/kategori/{id}', [PublicArtikelController::class, 'byCategory'])->name('artikel.category');
 
 // MIDTRANS CALLBACK (Wajib Public)
 Route::post('/midtrans-callback', [CallbackController::class, 'callback']);
