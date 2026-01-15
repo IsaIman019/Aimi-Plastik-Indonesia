@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Master Artikel')
+@section('title', 'Artikel')
 @push('styles')
 <link href="{{ asset('assets/css/admin/artikel/styles.css') }}" rel="stylesheet">
 @endpush

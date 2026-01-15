@@ -1,159 +1,248 @@
-<div id="editUserModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
-    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-
-        <!-- Overlay -->
+<div id="editProdukModal" class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen bg-black/50 px-4">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-        <!-- Modal panel -->
-            <div
-                class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div
+            class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
 
-                <!-- HEADER -->
-                <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-orange-50 to-amber-50">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="p-2 bg-orange-100 rounded-lg">
-                                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-900">Edit User</h3>
-                                <p class="text-sm text-gray-500 mt-0.5">Perbarui informasi pengguna</p>
-                            </div>
-                        </div>
-                        <button type="button" onclick="closeEditUserModal()"
-                            class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                            <svg class="w-5 h-5 text-gray-400 hover:text-gray-600" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+            <!-- HEADER -->
+            <div class="px-6 py-4 bg-gradient-to-r from-green-50 to-emerald-50 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-green-500 text-white rounded-xl">
+                        📦
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800">Edit Produk</h3>
+                        <p class="text-xs text-gray-500">Perbarui informasi produk</p>
                     </div>
                 </div>
+                <button onclick="closeEditProdukModal()" class="text-gray-400 hover:text-gray-600 transition text-lg">
+                    ✕
+                </button>
+            </div>
 
-                <!-- BODY -->
-                <form id="editUserForm" class="bg-white">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" id="edit_id">
+            <!-- BODY -->
+            <form id="editProdukForm" class="p-6 space-y-4" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <input type="hidden" id="edit_id" name="id">
 
-                    <div class="px-6 py-5 space-y-6">
-
-                        <!-- NAMA -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Kolom Kiri -->
+                    <div class="space-y-4">
+                        <!-- NAMA PRODUK -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Nama <span class="text-red-500">*</span>
+                                Nama Produk <span class="text-red-500">*</span>
                             </label>
-                            <input id="edit_nama" name="nama"
-                                placeholder="Contoh: Budi Santoso"
+                            <input type="text" id="edit_nama" name="nama" placeholder="Masukkan nama produk"
                                 class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
-                                    placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                            <p class="mt-1 text-xs text-gray-500">Nama lengkap pengguna</p>
+                                    placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                             <div id="edit_nama-error" class="mt-1 text-sm text-red-600 hidden"></div>
                         </div>
 
-                        <!-- EMAIL -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                            <input id="edit_email" name="email"
-                                placeholder="user@email.com"
-                                class="block w-full px-4 py-3 bg-gray-100 border border-gray-300 rounded-xl text-gray-500"
-                                readonly>
-                            <p class="mt-1 text-xs text-gray-500">Email tidak dapat diubah</p>
-                        </div>
-
-                        <!-- PHONE -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">No HP</label>
-                            <input id="edit_phone" name="phone"
-                                placeholder="08xxxxxxxxxx"
-                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
-                                    placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                            <p class="mt-1 text-xs text-gray-500">Nomor yang dapat dihubungi</p>
-                            <div id="edit_phone-error" class="mt-1 text-sm text-red-600 hidden"></div>
-                        </div>
-
-                        <!-- PASSWORD -->
+                        <!-- KATEGORI -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Password (Opsional)
+                                Kategori
                             </label>
-                            <input id="edit_password" name="password" type="password"
-                                placeholder="Kosongkan jika tidak diubah"
+                            <select id="edit_kategori_id" name="kategori_id"
                                 class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
-                                    placeholder-gray-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                            <p class="text-xs text-gray-500 mt-1">
-                                Isi hanya jika ingin mengganti password
+                                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <option value="">Pilih Kategori</option>
+                                @foreach($kategoris as $kategori)
+                                <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
+                                @endforeach
+                            </select>
+                            <div id="edit_kategori_id-error" class="mt-1 text-sm text-red-600 hidden"></div>
+                        </div>
+
+                        <!-- VARIAN -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Varian Produk <span class="text-red-500">*</span>
+                            </label>
+                            <select id="edit_varian_id" name="varian_id"
+                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <option value="">Pilih Varian</option>
+                                @foreach($varians as $varian)
+                                <option value="{{ $varian->id }}">
+                                    {{ $varian->nama }}
+                                    @if($varian->description)
+                                    - {{ $varian->description }}
+                                    @endif
+                                </option>
+                                @endforeach
+                            </select>
+                            <div id="edit_varian_id-error" class="mt-1 text-sm text-red-600 hidden"></div>
+                        </div>
+
+                        <!-- HARGA -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Harga <span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <span class="text-gray-500">Rp</span>
+                                </div>
+                                <input type="text" id="edit_harga" name="harga" placeholder="0"
+                                    class="block w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                        placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            </div>
+                            <div id="edit_harga-error" class="mt-1 text-sm text-red-600 hidden"></div>
+                        </div>
+
+                        <!-- STOK -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Stok <span class="text-red-500">*</span>
+                            </label>
+                            <input type="number" id="edit_stok" name="stok" min="0" placeholder="0"
+                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                    placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            <div id="edit_stok-error" class="mt-1 text-sm text-red-600 hidden"></div>
+                        </div>
+
+                        <!-- STATUS & FEATURED -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Status <span class="text-red-500">*</span>
+                                </label>
+                                <select id="edit_status" name="status"
+                                    class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                    <option value="ACTIVE">ACTIVE</option>
+                                    <option value="INACTIVE">INACTIVE</option>
+                                </select>
+                                <div id="edit_status-error" class="mt-1 text-sm text-red-600 hidden"></div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Produk Unggulan
+                                </label>
+                                <div class="mt-2">
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" id="edit_is_featured" name="is_featured" value="1"
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <span class="ml-2 text-sm text-gray-600">Produk Unggulan</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Kanan -->
+                    <div class="space-y-4">
+                        <!-- DESKRIPSI -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Deskripsi <span class="text-red-500">*</span>
+                            </label>
+                            <textarea id="edit_deskripsi" name="deskripsi" rows="4"
+                                placeholder="Deskripsi detail produk..."
+                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                    placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"></textarea>
+                            <div id="edit_deskripsi-error" class="mt-1 text-sm text-red-600 hidden"></div>
+                        </div>
+
+                        <!-- GAMBAR -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Gambar Produk <span class="text-gray-400">(Opsional)</span>
+                            </label>
+
+                            <!-- Current Image -->
+                            <div id="editCurrentImage" class="mb-3">
+                                <!-- Gambar saat ini akan dimuat via JavaScript -->
+                            </div>
+
+                            <!-- New Image Input -->
+                            <div class="mt-2">
+                                <input type="file" id="edit_image" name="image"
+                                    accept="image/jpeg,image/png,image/jpg,image/gif,image/webp"
+                                    class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                        text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0
+                                        file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700
+                                        hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500">
+                                Format: JPEG, PNG, JPG, GIF, WEBP. Maksimal 2MB
                             </p>
-                            <div id="edit_password-error" class="mt-1 text-sm text-red-600 hidden"></div>
+                            <div id="edit_image-error" class="mt-1 text-sm text-red-600 hidden"></div>
+
+                            <!-- New Image Preview -->
+                            <div id="editImagePreview" class="mt-3 hidden">
+                                <p class="text-sm text-gray-600 mb-2">Preview Gambar Baru:</p>
+                                <div class="relative inline-block">
+                                    <img id="editPreviewImage"
+                                        class="w-40 h-40 object-cover rounded-lg border border-gray-200">
+                                    <button type="button" onclick="removeEditImagePreview()"
+                                        class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600">
+                                        ✕
+                                    </button>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- ROLE -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Role <span class="text-red-500">*</span>
-                            </label>
-                            <select id="edit_role" name="role"
-                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
-                                    focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                                <option value="" disabled>Pilih Role</option>
-                                <option value="Admin">Admin</option>
-                                <option value="Pelanggan">Pelanggan</option>
-                            </select>
-                            <p class="mt-1 text-xs text-gray-500">Tentukan hak akses pengguna</p>
-                            <div id="edit_role-error" class="mt-1 text-sm text-red-600 hidden"></div>
-                        </div>
-
-                        <!-- STATUS -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Status <span class="text-red-500">*</span>
-                            </label>
-                            <select id="edit_status" name="status"
-                                class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
-                                    focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
-                                <option value="" disabled>Pilih Status</option>
-                                <option value="ACTIVE">ACTIVE</option>
-                                <option value="INACTIVE">INACTIVE</option>
-                            </select>
-                            <p class="mt-1 text-xs text-gray-500">Status akun pengguna</p>
-                            <div id="edit_status-error" class="mt-1 text-sm text-red-600 hidden"></div>
-                        </div>
-
-                    </div>
-
-                    <!-- FOOTER -->
-                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <button type="button" onclick="closeEditUserModal()"
-                                class="flex-1 sm:flex-none px-5 py-3 border border-gray-300 rounded-xl bg-white text-gray-700 hover:bg-gray-50">
-                                Batal
-                            </button>
-                            <button type="submit" id="editUserSubmitBtn"
-                                class="flex-1 sm:flex-none px-5 py-3 bg-gradient-to-r from-orange-600 to-amber-600 text-white rounded-xl font-semibold hover:from-orange-700 hover:to-amber-700">
-                                <span id="editUserSubmitText" class="flex items-center justify-center gap-2">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Simpan Perubahan
-                                </span>
-                            </button>
+                        <!-- DIMENSI PRODUK -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Berat
+                                </label>
+                                <input type="text" id="edit_berat" name="berat" placeholder="500gr"
+                                    class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                        placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Panjang
+                                </label>
+                                <input type="text" id="edit_panjang" name="panjang" placeholder="30 cm"
+                                    class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                        placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Lebar
+                                </label>
+                                <input type="text" id="edit_lebar" name="lebar" placeholder="20 cm"
+                                    class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                        placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Tinggi
+                                </label>
+                                <input type="text" id="edit_tinggi" name="tinggi" placeholder="10 cm"
+                                    class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                                        placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                            </div>
                         </div>
                     </div>
-                </form>
+                </div>
 
-            </div>
+                <!-- FOOTER -->
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                    <button type="button" onclick="closeEditProdukModal()"
+                        class="px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition">
+                        Batal
+                    </button>
+                    <button id="editProdukSubmitBtn" type="submit"
+                        class="px-5 py-2 bg-orange-500 text-white rounded-xl">
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @push('scripts')
 <script>
-    window.USERS_UPDATE_URL = "{{ route('admin.users.update', ':id') }}";
+window.PRODUK_UPDATE_URL = "{{ route('admin.produk.update', ':id') }}";
 </script>
-<script src="{{ asset('assets/js/admin/users/edit.js') }}" defer></script>
+<script src="{{ asset('assets/js/admin/produk/edit.js') }}" defer></script>
 @endpush

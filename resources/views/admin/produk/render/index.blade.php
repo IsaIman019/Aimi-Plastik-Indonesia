@@ -1,4 +1,4 @@
-@extends('admin.users.wrapper')
+@extends('admin.produk.wrapper')
 
 @section('render')
 <div class="flex min-h-screen bg-gray-50 font-sans text-gray-800">
@@ -16,14 +16,13 @@
                     </p>
                 </div>
 
-                <a href="{{ route('admin.produk.create') }}"
-                   class="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-700 hover:to-amber-700 text-white px-5 py-2.5 rounded-lg font-medium shadow-lg">
+                <button type="button" onclick="openCreateModal()"
+                    class="inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-amber-600 text-white px-5 py-2.5 rounded-lg font-medium shadow-lg hover:from-blue-700 hover:to-indigo-700 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M12 4v16m8-8H4"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
                     Tambah Produk
-                </a>
+                </button>
             </div>
         </div>
         @if(session('success'))
@@ -68,31 +67,35 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
                         </div>
                         <input type="text" id="searchInput"
-                               class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg"
-                               placeholder="Cari nama produk ...">
+                            class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-lg"
+                            placeholder="Cari nama produk ...">
                     </div>
                 </div>
 
                 <!-- KATEGORI -->
-                <select id="kategoriFilter"
-                        class="border rounded-lg px-4 py-2.5 bg-gray-50 border-gray-300">
-                    <option value="">Semua Kategori</option>
-                </select>
+                <div class="flex flex-col">
+                    <select id="kategoriFilter"
+                        class="border rounded-lg px-4 py-2.5 bg-gray-50 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                        <option value="">Semua Kategori</option>
+                        @foreach($kategoris as $kategori)
+                        <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
                 <!-- STATUS -->
-                <select id="statusFilter"
-                        class="border rounded-lg px-4 py-2.5 bg-gray-50 border-gray-300">
+                <select id="statusFilter" class="border rounded-lg px-4 py-2.5 bg-gray-50 border-gray-300">
                     <option value="">Semua Status</option>
                     <option value="ACTIVE">ACTIVE</option>
                     <option value="INACTIVE">INACTIVE</option>
                 </select>
 
                 <button onclick="resetFilters()"
-                        class="px-4 py-2.5 text-gray-700 bg-red-100 hover:bg-red-300 border border-gray-300 rounded-lg">
+                    class="px-4 py-2.5 text-gray-700 bg-red-100 hover:bg-red-300 border border-gray-300 rounded-lg">
                     Reset Filter
                 </button>
             </div>
@@ -105,8 +108,7 @@
                 <div>
                     <label class="flex items-center gap-2 text-sm">
                         <span>Tampilkan</span>
-                        <select id="pageLength"
-                                class="border border-gray-300 rounded-md px-2 py-1">
+                        <select id="pageLength" class="border border-gray-300 rounded-md px-2 py-1">
                             <option value="5">5</option>
                             <option value="10" selected>10</option>
                             <option value="25">25</option>
@@ -152,7 +154,8 @@
         </div>
     </div>
 </div>
-
+@include('admin.produk.render.create')
+@include('admin.produk.render.edit')
 @push('scripts')
 <script>
     window.PRODUK_INDEX_URL = "{{ route('admin.produk.index') }}";

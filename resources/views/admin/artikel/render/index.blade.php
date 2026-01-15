@@ -9,7 +9,7 @@
         <div class="mb-6 lg:mb-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Master Berita</h1>
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900">Berita & Artikel</h1>
                     <p class="text-gray-500 text-sm md:text-base mt-1">
                         Kelola berita dan artikel sistem.
                     </p>
@@ -24,7 +24,38 @@
                 </button>
             </div>
         </div>
-
+        @if(session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: '{{ session('
+                    success ') }}',
+                    timer: 3000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            });
+        </script>
+        @endif
+        @if(session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: '{{ session('
+                    error ') }}',
+                    timer: 3000,
+                    showConfirmButton: false,
+                    toast: true,
+                    position: 'top-end'
+                });
+            });
+        </script>
+        @endif
         <!-- Filter & Search -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
             <div class="flex flex-col lg:flex-row gap-4">

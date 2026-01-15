@@ -1,5 +1,11 @@
 $(document).ready(function () {
-    var table = $("#productsTable").DataTable({
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+
+    var table = $("#produkTable").DataTable({
         processing: true,
         serverSide: true,
         searching: false,
@@ -116,3 +122,78 @@ $(document).ready(function () {
         }
     };
 });
+
+window.editProduk = async function (id) {
+    // console.log("EDIT DIKLIK, ID:", id);
+
+    try {
+        const response = await axios.get(`/admin/produk/${id}/edit`);
+
+        if (window.openEditModal) {
+            window.openEditModal(response.data.data || response.data);
+        } else {
+            console.error("openEditModal tidak ditemukan");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+window.deleteProduk = function (id, value) {
+    Swal.fire({
+        title: "Hapus Produk?",
+        html: `
+            <div class="text-left">
+                <p class="text-gray-600 mb-3">
+                    Data Produk <strong>"${value}"</strong> akan dihapus permanen.
+                </p>
+            </div>
+        `,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#dc2626",
+        cancelButtonColor: "#6b7280",
+        confirmButtonText: "Ya, Hapus!",
+        cancelButtonText: "Batal",
+        reverseButtons: true,
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+
+        preConfirm: async () => {
+            try {
+                const response = await axios.delete(`/admin/produk/${id}`);
+
+                if (!response.data || response.data.success === false) {
+                    throw new Error(
+                        response.data?.message || "Gagal menghapus data produk"
+                    );
+                }
+
+                return response.data;
+            } catch (error) {
+                let errorMessage = "Gagal menghapus data produk";
+
+                if (error.response?.data?.message) {
+                    errorMessage = error.response.data.message;
+                }
+
+                Swal.showValidationMessage(errorMessage);
+            }
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                toast: true,
+                icon: "success",
+                title: result.value?.message || "Data produk berhasil dihapus",
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2500,
+            });
+
+            if (window.reloadProdukTable) {
+                reloadProdukTable();
+            }
+        }
+    });
+};

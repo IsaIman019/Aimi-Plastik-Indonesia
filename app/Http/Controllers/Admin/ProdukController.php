@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Product;
-use App\Models\Category;
 use App\Models\Produk;
+use App\Models\General;
+use App\Models\Kategori;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str; // <--- 1. WAJIB TAMBAHKAN INI
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->ajax()) {
-
             $query = Produk::with(['kategori', 'varian']);
 
             if ($request->search) {
-                $query->where('nama', 'like', "%{$request->search}%");
+                $query->where('nama', 'like', "%{$request->search}%")
+                    ->orWhere('deskripsi', 'like', "%{$request->search}%");
             }
 
             if ($request->filled('status')) {
@@ -31,115 +33,178 @@ class ProdukController extends Controller
                 $query->where('kategori_id', $request->kategori_id);
             }
 
+            if ($request->filled('varian_id')) {
+                $query->where('varian_id', $request->varian_id);
+            }
+
             return DataTables::of($query)
                 ->addIndexColumn()
-                ->addColumn('kategori', fn ($row) =>
-                    $row->kategori?->nama ?? '-'
-                )
-                ->addColumn('harga', fn ($row) =>
-                    'Rp ' . number_format($row->harga, 0, ',', '.')
-                )
-                ->addColumn('stok', fn ($row) =>
-                    $row->stok . ' Pcs'
-                )
-                ->addColumn('status', fn ($row) => $row->status)
+                ->addColumn('kategori', fn($row) => $row->kategori?->nama ?? '-')
+                ->addColumn('varian', fn($row) => $row->varian?->value ?? '-')
+                ->addColumn('harga', fn($row) => 'Rp ' . number_format($row->harga, 0, ',', '.'))
+                ->addColumn('stok', fn($row) => $row->stok . ' Pcs')
+                ->addColumn('status', function ($row) {
+                    $badge = $row->status == 'ACTIVE'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800';
+                    return '<span class="px-2 py-1 rounded-full text-xs font-medium ' . $badge . '">' . $row->status . '</span>';
+                })
                 ->addColumn('action', function ($row) {
                     return '
                     <div class="flex justify-center gap-2">
-                        <a href="'.route('admin.products.edit', $row->id).'"
-                            class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 flex items-center justify-center">✏️</a>
-                        <button onclick="deleteProduct('.$row->id.', \''.e($row->nama).'\')"
-                            class="w-8 h-8 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">🗑️</button>
+                        <button onclick="editProduk(' . $row->id . ')" class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100">✏️</button>
+                        <button onclick="deleteProduk(' . $row->id . ', \'' . e($row->nama) . '\')" class="w-8 h-8 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">🗑️</button>
                     </div>';
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['status', 'action'])
                 ->make(true);
         }
 
-        $produk = Produk::with('kategori')->latest()->paginate(10);
+        $kategoris = Kategori::where('status', 'ACTIVE')->get();
+        $varians = General::query()
+            ->where('key', 'Varian Produk')
+            ->where('status', 'ACTIVE')
+            ->get(['id', 'value as nama']);
 
-        return view('admin.produk.render.index', compact('produk'));
+        return view('admin.produk.render.index', compact('kategoris', 'varians'));
     }
 
-    public function create()
-    {
-        $categories = Category::all();
-        return view('admin.products.create', compact('categories'));
-    }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'nullable|exists:categories,id',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'description' => 'nullable|string',
+            'kategori_id' => 'nullable|exists:kategori,id',
+            'nama' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'varian_id' => 'required',
+            'harga' => 'required|numeric|min:0',
+            'stok' => 'required|integer|min:0',
+            'berat' => 'nullable|string',
+            'panjang' => 'nullable|string',
+            'lebar' => 'nullable|string',
+            'tinggi' => 'nullable|string',
+            'status' => 'required|in:ACTIVE,INACTIVE',
+            'is_featured' => 'nullable|boolean',
         ]);
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
+            $imagePath = $request->file('image')->store('produk', 'public');
         }
 
-        Product::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name), // <--- 2. TAMBAHKAN BARIS INI
-            'category_id' => $request->category_id,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'description' => $request->description,
+        Produk::create([
+            'kategori_id' => $request->kategori_id,
+            'nama' => $request->nama,
+            'deskripsi' => $request->deskripsi,
             'image' => $imagePath,
-            'is_active' => true,
+            'varian_id' => $request->varian_id,
+            'harga' => $request->harga,
+            'stok' => $request->stok,
+            'berat' => $request->berat,
+            'panjang' => $request->panjang,
+            'lebar' => $request->lebar,
+            'tinggi' => $request->tinggi,
+            'status' => $request->status,
+            'is_featured' => $request->is_featured ?? 0,
         ]);
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Produk berhasil ditambahkan'
+        ]);
     }
 
     public function edit($id)
     {
-        $product = Product::findOrFail($id);
-        $categories = Category::all();
-        return view('admin.products.edit', compact('product', 'categories'));
+        $produk = Produk::findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'data' => $produk
+        ]);
     }
 
     public function update(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $produk = Produk::findOrFail($id);
 
         $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'nullable|exists:categories,id',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'image' => 'nullable|image|max:2048',
+            'kategori_id' => 'nullable|exists:kategori,id',
+            'nama' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'varian_id' => 'required',
+            'harga' => 'required|numeric|min:0',
+            'stok' => 'required|integer|min:0',
+            'berat' => 'nullable|string',
+            'panjang' => 'nullable|string',
+            'lebar' => 'nullable|string',
+            'tinggi' => 'nullable|string',
+            'status' => 'required|in:ACTIVE,INACTIVE',
+            'is_featured' => 'nullable|boolean',
         ]);
 
         $data = $request->except(['image']);
-        
-        // Update Slug jika nama berubah
-        $data['slug'] = Str::slug($request->name); // <--- 3. TAMBAHKAN BARIS INI JUGA
 
         if ($request->hasFile('image')) {
-            if ($product->image && Storage::exists('public/' . $product->image)) {
-                Storage::delete('public/' . $product->image);
+            if ($produk->image && Storage::exists('public/' . $produk->image)) {
+                Storage::delete('public/' . $produk->image);
             }
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $data['image'] = $request->file('image')->store('produk', 'public');
         }
 
-        $product->update($data);
+        $produk->update($data);
 
-        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui!');
+        return response()->json([
+            'success' => true,
+            'message' => 'Produk berhasil diperbarui',
+            'data' => $produk
+        ]);
     }
 
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        if ($product->image && Storage::exists('public/' . $product->image)) {
-            Storage::delete('public/' . $product->image);
+        try {
+            $produk = Produk::find($id);
+
+            if (!$produk) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Produk tidak ditemukan'
+                ], 404);
+            }
+
+            DB::beginTransaction();
+            if ($produk->image) {
+                Storage::disk('public')->delete($produk->image);
+            }
+
+            $nama = $produk->nama;
+            $produk->delete();
+
+            DB::commit();
+
+            Log::info('Produk deleted', [
+                'id' => $id,
+                'nama' => $nama
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Produk "' . $nama . '" berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Log::error('Error deleting produk', [
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menghapus data produk'
+            ], 500);
         }
-        $product->delete();
-        return redirect()->route('admin.products.index')->with('success', 'Produk berhasil dihapus.');
     }
 }

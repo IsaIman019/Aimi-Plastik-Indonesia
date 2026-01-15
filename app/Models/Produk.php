@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon; // <--- PENTING: Import Carbon untuk cek tanggal promo
+use Carbon\Carbon;
 
 class Produk extends Model
 {
@@ -19,7 +19,7 @@ class Produk extends Model
     }
     public function varian()
     {
-        return $this->belongsTo(General::class);
+        return $this->belongsTo(General::class, 'varian_id');
     }
 
     // public function promos()
@@ -31,8 +31,8 @@ class Produk extends Model
     // {
     //     return $this->promos()
     //         ->where('is_active', true)
-    //         ->whereDate('start_date', '<=', Carbon::now()) 
-    //         ->whereDate('end_date', '>=', Carbon::now())  
+    //         ->whereDate('start_date', '<=', Carbon::now())
+    //         ->whereDate('end_date', '>=', Carbon::now())
     //         ->orderBy('value', 'desc')
     //         ->first();
     // }

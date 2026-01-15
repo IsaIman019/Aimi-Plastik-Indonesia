@@ -28,7 +28,7 @@ use App\Http\Controllers\Admin\StokController as AdminStokController;
 use App\Http\Controllers\Admin\ArtikelController as AdminArtikelController;
 use App\Http\Controllers\KategoriController;
 // C. Controllers Pelanggan
-use App\Http\Controllers\Pelanggan\ProductController as PelangganProductController;
+use App\Http\Controllers\Pelanggan\ProdukController as PelangganProdukController;
 use App\Http\Controllers\Pelanggan\CartController;
 use App\Http\Controllers\Pelanggan\CheckoutController;
 use App\Http\Controllers\Pelanggan\OrderController as PelangganOrderController;
@@ -115,8 +115,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
 Route::prefix('pelanggan')->middleware(['auth', 'role:pelanggan'])->group(function () {
     // 1. Produk & Katalog
-    Route::get('/produk', [PelangganProductController::class, 'index'])->name('pelanggan.products');
-    Route::get('/produk/{id}', [PelangganProductController::class, 'show'])->name('pelanggan.products.show');
+    Route::get('/produk', [PelangganProdukController::class, 'index'])->name('pelanggan.produk');
+    Route::get('/produk/{id}', [PelangganProdukController::class, 'show'])->name('pelanggan.produk.show');
 
     // 2. Keranjang Belanja
     Route::get('/cart', [CartController::class, 'index'])->name('cart');

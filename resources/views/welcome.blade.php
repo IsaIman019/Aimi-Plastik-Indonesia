@@ -226,7 +226,7 @@
                 <p class="mt-3 text-gray-500 max-w-xl">Temukan berbagai kebutuhan packing mulai dari lakban, bubble
                     wrap, hingga kardus dengan kualitas terbaik.</p>
             </div>
-            <a href="{{ Auth::check() ? route('pelanggan.products') : route('login') }}"
+            <a href="{{ Auth::check() ? route('pelanggan.produk') : route('login') }}"
                 class="inline-flex items-center gap-2 text-white bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-full font-medium transition shadow-md shadow-orange-500/20">
                 Lihat Semua Produk <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
