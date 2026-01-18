@@ -29,7 +29,7 @@ use App\Http\Controllers\Admin\ArtikelController as AdminArtikelController;
 use App\Http\Controllers\KategoriController;
 // C. Controllers Pelanggan
 use App\Http\Controllers\Pelanggan\ProdukController as PelangganProdukController;
-use App\Http\Controllers\Pelanggan\CartController;
+use App\Http\Controllers\Pelanggan\KeranjangController;
 use App\Http\Controllers\Pelanggan\CheckoutController;
 use App\Http\Controllers\Pelanggan\OrderController as PelangganOrderController;
 use App\Http\Controllers\Pelanggan\ProfileController;
@@ -94,7 +94,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/stok', [AdminStokController::class, 'index'])->name('admin.stok.index');
     Route::put('/stok/{produk}', [AdminStokController::class, 'update'])
-    ->name('admin.stok.update');
+        ->name('admin.stok.update');
     Route::resource('/pesanan', AdminPesananController::class)->names('admin.pesanan');
     // Route::get('/orders/{id}/edit', [AdminOrderController::class, 'edit'])->name('admin.orders.edit');
     // Route::put('/orders/{id}', [AdminOrderController::class, 'update'])->name('admin.orders.update');
@@ -119,10 +119,12 @@ Route::prefix('pelanggan')->middleware(['auth', 'role:pelanggan'])->group(functi
     Route::get('/produk/{id}', [PelangganProdukController::class, 'show'])->name('pelanggan.produk.show');
 
     // 2. Keranjang Belanja
-    Route::get('/cart', [CartController::class, 'index'])->name('cart');
-    Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add');
-    Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang');
+    Route::post('/keranjang', [KeranjangController::class, 'store'])->name('keranjang.store');
+    Route::put('/keranjang/{id}', [KeranjangController::class, 'update'])->name('keranjang.update');
+    Route::delete('/keranjang/{id}', [KeranjangController::class, 'destroy'])->name('keranjang.destroy');
+    Route::delete('/keranjang-clear', [KeranjangController::class, 'clear'])->name('keranjang.clear');
+    Route::get('/keranjang-total', [KeranjangController::class, 'getTotal'])->name('keranjang.total');
 
     // 3. Checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');

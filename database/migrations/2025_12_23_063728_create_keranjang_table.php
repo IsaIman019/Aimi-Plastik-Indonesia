@@ -9,11 +9,11 @@ return new class extends Migration {
     {
         Schema::create('keranjang', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')
-                  ->constrained('produk');
+            $table->foreignId('produk_id')
+                ->constrained('produk');
             $table->foreignId('user_id')
-                  ->constrained('users')
-                  ->cascadeOnDelete();
+                ->constrained('users')
+                ->cascadeOnDelete();
             $table->integer('qty');
             $table->string('status')->nullable();
             $table->timestamps();
@@ -22,6 +22,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('keranjang');
     }
 };

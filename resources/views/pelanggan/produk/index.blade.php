@@ -79,7 +79,7 @@
                         Stok: {{ $produk->stok }} pcs
                     </p>
 
-                    <form action="{{ route('cart.add') }}" method="POST" class="mt-3">
+                    <form action="{{ route('keranjang.store') }}" method="POST" class="mt-3">
                         @csrf
                         <input type="hidden" name="produk_id" value="{{ $produk->id }}">
                         <input type="hidden" name="quantity" value="1">
@@ -123,7 +123,7 @@
                 @endif
             </p>
             @if(request()->has('search'))
-            <a href="{{ route('pelanggan.produk.index') }}"
+            <a href="{{ route('pelanggan.produk') }}"
                 class="inline-block px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition">
                 Lihat Semua Produk
             </a>
