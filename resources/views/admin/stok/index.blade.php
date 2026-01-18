@@ -32,32 +32,32 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @forelse($products as $product)
+                        @forelse($produk as $produk)
                         <tr class="hover:bg-gray-50 transition">
                             
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-4">
                                     <div class="w-12 h-12 rounded-lg bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0 flex items-center justify-center">
-                                        @if($product->image)
-                                            <img src="{{ asset('storage/' . $product->image) }}" class="w-full h-full object-cover">
+                                        @if($produk->image)
+                                            <img src="{{ asset('storage/' . $produk->image) }}" class="w-full h-full object-cover">
                                         @else
                                             <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                         @endif
                                     </div>
-                                    <span class="font-bold text-gray-900">{{ $product->name }}</span>
+                                    <span class="font-bold text-gray-900">{{ $produk->name }}</span>
                                 </div>
                             </td>
 
                             <td class="px-6 py-4">
                                 <span class="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-bold">
-                                    {{ $product->category->name ?? '-' }}
+                                    {{ $produk->category->name ?? '-' }}
                                 </span>
                             </td>
 
                             <td class="px-6 py-4 text-center">
-                                @if($product->stock == 0)
+                                @if($produk->stock == 0)
                                     <span class="inline-flex px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-bold">Habis</span>
-                                @elseif($product->stock <= 10)
+                                @elseif($produk->stock <= 10)
                                     <span class="inline-flex px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold">Menipis</span>
                                 @else
                                     <span class="inline-flex px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Aman</span>
@@ -65,10 +65,10 @@
                             </td>
 
                             <td class="px-6 py-4">
-                                <form action="{{ route('admin.stock.update', $product->id) }}" method="POST" class="flex items-center gap-2">
+                                <form action="{{ route('admin.stock.update', $produk->id) }}" method="POST" class="flex items-center gap-2">
                                     @csrf
                                     <div class="relative w-24">
-                                        <input type="number" name="stock" value="{{ $product->stock }}" min="0" class="w-full border-gray-300 rounded-lg text-center font-bold focus:ring-orange-500 focus:border-orange-500 text-sm py-2">
+                                        <input type="number" name="stock" value="{{ $produk->stock }}" min="0" class="w-full border-gray-300 rounded-lg text-center font-bold focus:ring-orange-500 focus:border-orange-500 text-sm py-2">
                                     </div>
                                     <button type="submit" class="p-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition shadow-md" title="Simpan Stok">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
@@ -87,7 +87,7 @@
             </div>
             
             <div class="p-4 border-t border-gray-100">
-                {{ $products->links() }}
+                {{ $produk->links() }}
             </div>
         </div>
 
