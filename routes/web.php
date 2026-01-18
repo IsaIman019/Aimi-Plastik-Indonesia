@@ -20,7 +20,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\GeneralController as AdminGeneralController;
 use App\Http\Controllers\Admin\ProdukController as AdminProdukController;
 use App\Http\Controllers\Admin\KategoriController as AdminKategoriController;
-use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\PesananController as AdminPesananController;
 use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
 use App\Http\Controllers\Admin\PromoController as AdminPromoController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
@@ -95,10 +95,10 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/stok', [AdminStokController::class, 'index'])->name('admin.stok.index');
     Route::post('/stok/update/{id}', [AdminStokController::class, 'update'])->name('admin.stok.update');
 
-    Route::get('/orders', [AdminOrderController::class, 'index'])->name('admin.orders');
-    Route::get('/orders/{id}/edit', [AdminOrderController::class, 'edit'])->name('admin.orders.edit');
-    Route::put('/orders/{id}', [AdminOrderController::class, 'update'])->name('admin.orders.update');
-    Route::get('/orders/{id}/resi', [AdminOrderController::class, 'cetakResi'])->name('admin.orders.resi');
+    Route::resource('/pesanan', AdminPesananController::class)->names('admin.pesanan');
+    // Route::get('/orders/{id}/edit', [AdminOrderController::class, 'edit'])->name('admin.orders.edit');
+    // Route::put('/orders/{id}', [AdminOrderController::class, 'update'])->name('admin.orders.update');
+    // Route::get('/orders/{id}/resi', [AdminOrderController::class, 'cetakResi'])->name('admin.orders.resi');
 
     Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('admin.transactions.index');
     Route::delete('/transactions/{id}', [AdminTransactionController::class, 'destroy'])->name('admin.transactions.destroy');
