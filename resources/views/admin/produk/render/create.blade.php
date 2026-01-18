@@ -1,14 +1,14 @@
 <div id="createProdukModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen bg-black/50 px-4">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+        <div class="fixed inset-0 bg-black/10 backdrop-blur-sm"></div>
 
         <div
             class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl sm:my-8 sm:max-w-4xl sm:w-full">
 
             <!-- HEADER -->
-            <div class="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 flex items-center justify-between">
+            <div class="px-6 py-4 bg-gradient-to-r from-orange-50 to-amber-50 flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <div class="p-2 bg-green-500 text-white rounded-xl">
+                    <div class="p-2 bg-orange-500 text-white rounded-xl">
                         📦
                     </div>
                     <div>
@@ -16,7 +16,7 @@
                         <p class="text-xs text-gray-500">Tambah produk baru ke katalog</p>
                     </div>
                 </div>
-                <button onclick="closeCreateProdukModal()" class="text-gray-400 hover:text-gray-600 transition">
+                <button onclick="closeCreateProdukModal()" class="text-gray-400 hover:text-gray-600">
                     ✕
                 </button>
             </div>
