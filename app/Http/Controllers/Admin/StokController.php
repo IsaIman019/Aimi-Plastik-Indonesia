@@ -3,47 +3,58 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kategori;
 use App\Models\produk;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class StokController extends Controller
 {
     // 1. TAMPILKAN HALAMAN MANAJEMEN STOK
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil produk, urutkan dari stok terendah (ASC) agar yang habis muncul diatas
-        $produk = produk::select('id', 'name', 'image', 'stock', 'category_id')
-                            ->with('category')
-                            ->orderBy('stock', 'asc') // Stok sedikit di atas
-                            ->paginate(15);
+        if ($request->ajax()) {
+            $query = Produk::with('kategori')
+                ->select('produk.id', 'produk.nama', 'produk.stok', 'produk.status', 'produk.kategori_id');
 
-        return view('admin.stok.index', compact('produk'));
+            if ($request->search) {
+                $query->where('nama', 'like', "%{$request->search}%");
+            }
+
+            if ($request->status) {
+                $query->where('status', $request->status);
+            }
+
+            if ($request->kategori_id) {
+                $query->where('kategori_id', $request->kategori_id);
+            }
+
+            return DataTables::of($query)
+                ->addIndexColumn()
+                ->addColumn('kategori', fn ($row) => $row->kategori?->nama ?? '-')
+                ->make(true);
+        }
+
+        $kategoris = Kategori::orderBy('nama')->get();
+
+        return view('admin.stok.render.index', compact('kategoris'));
     }
 
     // 2. PROSES UPDATE STOK CEPAT
-    public function update(Request $request, $id)
+   public function update(Request $request, $id)
     {
-        $produk = produk::findOrFail($id);
-
         $request->validate([
-            'stock' => 'required|integer|min:0',
+            'stok' => 'required|integer|min:0',
+            'status' => 'required|in:ACTIVE,INACTIVE',
         ]);
 
-        // Update stok
+        $produk = Produk::findOrFail($id);
+
         $produk->update([
-            'stock' => $request->stock
+            'stok' => $request->stok,
+            'status' => $request->status,
         ]);
 
-        // Cek jika stok 0, otomatis non-aktifkan (Opsional, tapi bagus untuk UX)
-        if ($produk->stock == 0) {
-            $produk->update(['is_active' => false]);
-            $msg = 'Stok diperbarui jadi 0 (Produk dinonaktifkan).';
-        } else {
-            // Jika stok diisi lagi, aktifkan kembali
-            $produk->update(['is_active' => true]);
-            $msg = 'Stok berhasil diperbarui.';
-        }
-
-        return redirect()->back()->with('success', $msg);
+        return response()->json(['success' => true]);
     }
 }
