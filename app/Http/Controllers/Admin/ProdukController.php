@@ -22,7 +22,7 @@ class ProdukController extends Controller
 
             if ($request->search) {
                 $query->where('nama', 'like', "%{$request->search}%")
-                    ->orWhere('deskripsi', 'like', "%{$request->search}%");
+                    ->orWhere('varian_id', 'like', "%{$request->search}%");
             }
 
             if ($request->filled('status')) {

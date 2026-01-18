@@ -2,7 +2,8 @@
     <div class="flex items-center justify-center min-h-screen bg-black/50 px-4">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-        <div class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div
+            class="relative inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
 
             <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl overflow-hidden">
 
@@ -12,7 +13,7 @@
                         <div class="p-2 bg-orange-500 text-white rounded-xl">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4v16m8-8H4"/>
+                                    d="M12 4v16m8-8H4" />
                             </svg>
                         </div>
                         <div>
@@ -36,13 +37,10 @@
                         </label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">👤</span>
-                            <input type="text" name="nama"
-                                placeholder="Contoh: Budi Santoso"
-                                class="block w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                            <input type="text" name="nama" placeholder="Contoh: Budi Santoso" class="block w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
                                     text-gray-900 placeholder-gray-500
                                     focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
-                                    transition duration-200 text-sm"
-                                required>
+                                    transition duration-200 text-sm" required>
                         </div>
                         <p class="mt-1 text-xs text-gray-500">Nama lengkap pengguna</p>
                         <p id="create_nama-error" class="text-xs text-red-500 mt-1 hidden"></p>
@@ -55,13 +53,10 @@
                         </label>
                         <div class="relative">
                             <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">✉️</span>
-                            <input type="email" name="email"
-                                placeholder="Contoh: user@email.com"
-                                class="block w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                            <input type="email" name="email" placeholder="Contoh: user@email.com" class="block w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
                                     text-gray-900 placeholder-gray-500
                                     focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
-                                    transition duration-200 text-sm"
-                                required>
+                                    transition duration-200 text-sm" required>
                         </div>
                         <p class="mt-1 text-xs text-gray-500">Digunakan untuk login dan notifikasi</p>
                         <p id="create_email-error" class="text-xs text-red-500 mt-1 hidden"></p>
@@ -72,9 +67,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             No. HP
                         </label>
-                        <input type="text" name="phone"
-                            placeholder="Contoh: 081234567890"
-                            class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                        <input type="text" name="phone" placeholder="Contoh: 081234567890" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
                                 text-gray-900 placeholder-gray-500
                                 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
                                 transition duration-200 text-sm">
@@ -86,13 +79,10 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Password <span class="text-red-500">*</span>
                         </label>
-                        <input type="password" name="password"
-                            placeholder="Minimal 8 karakter"
-                            class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                        <input type="password" name="password" placeholder="Minimal 8 karakter" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
                                 text-gray-900 placeholder-gray-500
                                 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
-                                transition duration-200 text-sm"
-                            required>
+                                transition duration-200 text-sm" required>
                         <p class="mt-1 text-xs text-gray-500">Gunakan kombinasi huruf dan angka</p>
                         <p id="create_password-error" class="text-xs text-red-500 mt-1 hidden"></p>
                     </div>
@@ -102,8 +92,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Role <span class="text-red-500">*</span>
                         </label>
-                        <select name="role"
-                            class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                        <select name="role" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
                                 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
                                 transition duration-200 text-sm">
                             <option value="" disabled selected>Pilih Role</option>
@@ -119,8 +108,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Status
                         </label>
-                        <select name="status"
-                            class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
+                        <select name="status" class="block w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-xl
                                 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
                                 transition duration-200 text-sm">
                             <option value="ACTIVE">ACTIVE</option>
