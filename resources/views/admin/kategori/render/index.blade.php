@@ -1,4 +1,4 @@
-@extends('admin.general.wrapper')
+@extends('admin.kategori.wrapper')
 
 @section('render')
 <div class="flex min-h-screen bg-gray-50 font-sans text-gray-800">
