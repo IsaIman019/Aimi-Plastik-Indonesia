@@ -161,24 +161,32 @@ $(document).ready(function () {
         const row = table.row(tr);
         const data = row.data();
 
-        tr.find("td:eq(4)").html(`
-        <input type="number" id="stok-${id}"
+        // STOK (kolom index 3)
+        tr.find("td:eq(3)").html(`
+        <input type="number"
+            id="stok-${id}"
             value="${data.stok}"
             class="w-20 px-2 py-1 border rounded text-center">
     `);
 
-        tr.find("td:eq(5)").html(`
+        // STATUS (kolom index 4)
+        tr.find("td:eq(4)").html(`
         <select id="status-${id}" class="px-2 py-1 border rounded">
             <option value="ACTIVE" ${data.status === "ACTIVE" ? "selected" : ""}>ACTIVE</option>
             <option value="INACTIVE" ${data.status === "INACTIVE" ? "selected" : ""}>INACTIVE</option>
         </select>
     `);
 
-        tr.find("td:eq(6)").html(`
+        // AKSI (kolom index 5)
+        tr.find("td:eq(5)").html(`
         <button onclick="updateStok(${id})"
-            class="px-3 py-1 text-sm bg-green-600 text-white rounded mr-1">Simpan</button>
+            class="px-3 py-1 text-sm bg-green-600 text-white rounded mr-1">
+            Simpan
+        </button>
         <button onclick="reloadStokTable()"
-            class="px-3 py-1 text-sm bg-gray-200 rounded">Batal</button>
+            class="px-3 py-1 text-sm bg-gray-200 rounded">
+            Batal
+        </button>
     `);
     };
 

@@ -117,7 +117,7 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table id="stokTable" class="min-w-full divide-y divide-gray-200">
+                <table id="stokTable" class="min-w-full ">
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-4 py-3 text-center text-xs font-medium">NO</th>
