@@ -281,7 +281,7 @@
 
                         {{-- Tombol Quick Cart --}}
                         @auth
-                        <form action="{{ route('cart.add') }}" method="POST">
+                        <form action="{{ route('keranjang.store') }}" method="POST">
                             @csrf
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <input type="hidden" name="quantity" value="1">
@@ -586,7 +586,7 @@
 
                         {{-- Form Add to Cart --}}
                         @auth
-                        <form action="{{ route('cart.add') }}" method="POST" class="mt-6">
+                        <form action="{{ route('keranjang.store') }}" method="POST" class="mt-6">
                             @csrf
                             <input type="hidden" name="product_id" id="modalProductId">
 
