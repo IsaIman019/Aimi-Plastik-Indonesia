@@ -15,6 +15,7 @@ return new class extends Migration {
         $table->decimal('jumlah', 15, 2); 
         $table->date('tanggal_mulai');
         $table->date('tanggal_selesai');
+        $table->boolean('is_all_product')->default(false);
         $table->string('status')->default('ACTIVE');
         $table->timestamps();
     });

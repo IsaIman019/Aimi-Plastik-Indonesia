@@ -22,6 +22,18 @@ class Produk extends Model
         return $this->belongsTo(General::class, 'varian_id');
     }
 
+
+
+    public function promos()
+    {
+        return $this->belongsToMany(
+            Promo::class,
+            'promo_produk',
+            'produk_id',
+            'promo_id'
+        );
+    }
+
     // public function promos()
     // {
     //     return $this->belongsToMany(Promo::class, 'product_promo');

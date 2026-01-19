@@ -95,6 +95,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/stok', [AdminStokController::class, 'index'])->name('admin.stok.index');
     Route::put('/stok/{produk}', [AdminStokController::class, 'update'])
         ->name('admin.stok.update');
+    Route::resource('promo', AdminPromoController::class)->names('admin.promos');;
     Route::resource('/pesanan', AdminPesananController::class)->names('admin.pesanan');
     // Route::get('/orders/{id}/edit', [AdminOrderController::class, 'edit'])->name('admin.orders.edit');
     // Route::put('/orders/{id}', [AdminOrderController::class, 'update'])->name('admin.orders.update');
@@ -103,7 +104,6 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('admin.transactions.index');
     Route::delete('/transactions/{id}', [AdminTransactionController::class, 'destroy'])->name('admin.transactions.destroy');
 
-    Route::resource('/promos', AdminPromoController::class)->names('admin.promos');
     Route::get('/reports', [AdminReportController::class, 'index'])->name('admin.reports.index');
     Route::resource('/artikel', AdminArtikelController::class)->names('admin.artikel');
 });

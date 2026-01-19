@@ -23,12 +23,10 @@ class ProdukController extends Controller
 
     public function show($id)
     {
-        // Perbaikan: Gunakan 'status' bukan 'ACTIVE' sebagai kolom
         $produk = Produk::with(['kategori', 'varian'])
             ->where('status', 'ACTIVE')
             ->findOrFail($id);
 
-        // Rekomendasi produk lain (random 4 item)
         $produkTerkaits = Produk::where('status', 'ACTIVE')
             ->where('id', '!=', $id)
             ->inRandomOrder()
@@ -37,4 +35,6 @@ class ProdukController extends Controller
 
         return view('pelanggan.produk.show', compact('produk', 'produkTerkaits'));
     }
+
+    
 }
