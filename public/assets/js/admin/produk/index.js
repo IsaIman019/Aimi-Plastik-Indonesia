@@ -56,11 +56,11 @@ $(document).ready(function () {
                 sampai <span class="font-semibold">${pageInfo.end}</span>
                 dari <span class="font-semibold">${
                     pageInfo.recordsTotal
-                }</span> data`
+                }</span> data`,
         );
 
         $("#tableInfoTop").html(
-            `Total: <span class="font-semibold">${pageInfo.recordsTotal}</span> data`
+            `Total: <span class="font-semibold">${pageInfo.recordsTotal}</span> data`,
         );
 
         if (pageInfo.recordsTotal === 0) {
@@ -81,7 +81,7 @@ $(document).ready(function () {
         const maxVisiblePages = 5;
         let startPage = Math.max(
             0,
-            pageInfo.page - Math.floor(maxVisiblePages / 2)
+            pageInfo.page - Math.floor(maxVisiblePages / 2),
         );
         let endPage = Math.min(pageInfo.pages, startPage + maxVisiblePages);
 
@@ -102,7 +102,7 @@ $(document).ready(function () {
                 : `<button disabled class="text-gray-400 cursor-not-allowed">›</button>`;
 
         $("#paginationContainer").html(
-            `<div class="custom-pagination">${paginationHtml}</div>`
+            `<div class="custom-pagination">${paginationHtml}</div>`,
         );
     }
 
@@ -165,7 +165,7 @@ window.deleteProduk = function (id, value) {
 
                 if (!response.data || response.data.success === false) {
                     throw new Error(
-                        response.data?.message || "Gagal menghapus data produk"
+                        response.data?.message || "Gagal menghapus data produk",
                     );
                 }
 

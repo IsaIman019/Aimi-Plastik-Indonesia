@@ -73,9 +73,7 @@ public function store(Request $request)
         'tanggal_mulai' => 'required|date',
         'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
         'status' => 'required|in:ACTIVE,INACTIVE',
-
-        // ⬇️ hanya wajib kalau TIDAK all product
-        'produk_ids' => 'required_if:is_all_product,0|array',
+        'produk_ids' => 'required_if:is_all_product,0|array|min:1',
         'produk_ids.*' => 'exists:produk,id',
     ]);
 
@@ -90,8 +88,10 @@ public function store(Request $request)
         'status' => $request->status,
     ]);
 
-    // 🔥 INSERT pivot
-    if (!$promo->is_all_product) {
+    if ($promo->is_all_product) {
+        $produkIds = Produk::where('status', 'ACTIVE')->pluck('id')->toArray();
+        $promo->produks()->sync($produkIds);
+    } else {
         $promo->produks()->sync($request->produk_ids);
     }
 
@@ -99,35 +99,56 @@ public function store(Request $request)
 }
 
 
-    public function edit(Promo $promo)
-    {
-        $products = Product::all();
-        // Ambil ID produk yang sedang terhubung dengan promo ini
-        $selectedProducts = $promo->products->pluck('id')->toArray();
-        
-        return view('admin.promos.edit', compact('promo', 'products', 'selectedProducts'));
+public function edit($id)
+{
+    $promo = Promo::with('produks')->findOrFail($id);
+
+    return response()->json([
+        'id' => $promo->id,
+        'nama' => $promo->nama,
+        'kode' => $promo->kode,
+        'tipe' => $promo->tipe,
+        'jumlah' => $promo->jumlah,
+        'status' => $promo->status,
+        'is_all_product' => $promo->is_all_product,
+        'tanggal_mulai' => $promo->tanggal_mulai?->format('Y-m-d'),
+        'tanggal_selesai' => $promo->tanggal_selesai?->format('Y-m-d'),
+        'produk_ids' => $promo->produks->pluck('id')->values(),
+    ]);
+}
+
+
+public function update(Request $request, $id)
+{
+    $promo = Promo::findOrFail($id);
+
+    $data = $request->validate([
+        'nama' => 'required',
+        'kode' => 'required',
+        'tipe' => 'required',
+        'jumlah' => 'required|numeric',
+        'tanggal_mulai' => 'required|date',
+        'tanggal_selesai' => 'required|date',
+        'status' => 'required',
+        'is_all_product' => 'boolean',
+        'produk_ids' => 'array',
+    ]);
+
+    $promo->update($data);
+
+    if ($request->is_all_product) {
+        $promo->produks()->detach();
+    } else {
+        $promo->produks()->sync($request->produk_ids ?? []);
     }
 
-    public function update(Request $request, Promo $promo)
-    {
-        $request->validate([
-            'name' => 'required',
-            'type' => 'required|in:percent,fixed',
-            'value' => 'required|numeric',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'products' => 'required|array'
-        ]);
+    return response()->json(['message' => 'Updated']);
+}
 
-        $promo->update($request->except('products'));
-        $promo->products()->sync($request->products); // Update relasi produk
+public function destroy($id)
+{
+    Promo::findOrFail($id)->delete();
+    return response()->json(['message' => 'Deleted']);
+}
 
-        return redirect()->route('admin.promos.index')->with('success', 'Promo diperbarui!');
-    }
-
-    public function destroy(Promo $promo)
-    {
-        $promo->delete();
-        return back()->with('success', 'Promo dihapus.');
-    }
 }

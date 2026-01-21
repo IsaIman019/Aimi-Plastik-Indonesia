@@ -80,10 +80,12 @@
     </div>
 </div>
 @include('admin.promos.render.create')
-
+@include('admin.promos.render.edit')
 @push('scripts')
 <script>
     window.PROMO_INDEX_URL = "{{ route('admin.promos.index') }}";
+    window.PROMO_EDIT_URL   = "{{ url('admin/promo') }}";
+    window.PROMO_DELETE_URL = "{{ url('admin/promo') }}";
 </script>
 <script src="{{ asset('assets/js/admin/promo/index.js') }}" defer></script>
 @endpush

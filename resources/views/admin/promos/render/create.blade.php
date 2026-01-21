@@ -80,6 +80,7 @@
 
                 <!-- ALL PRODUCT -->
                 <div class="flex items-center gap-2">
+                    <input type="hidden" name="is_all_product" value="0">
                     <input type="checkbox" id="isAllProduct" name="is_all_product" value="1">
                     <label for="isAllProduct" class="text-sm">
                         Berlaku untuk semua produk
@@ -89,19 +90,26 @@
                 <!-- PRODUK -->
                 <div>
                     <label class="block text-sm font-medium mb-1">Pilih Produk</label>
-                    <select id="produkSelect" name="produk_ids[]"
-                        multiple
-                        class="w-full px-4 py-2.5 border rounded-xl bg-gray-50 h-32">
+
+                    <div id="produkCheckboxWrapper"
+                        class="border rounded-xl bg-gray-50 p-3 space-y-2 max-h-40 overflow-y-auto">
+
                         @foreach ($produks as $produk)
-                            <option value="{{ $produk->id }}">
+                            <label class="flex items-center gap-2 text-sm">
+                                <input type="checkbox"
+                                    class="produk-checkbox"
+                                    name="produk_ids[]"
+                                    value="{{ $produk->id }}">
                                 {{ $produk->nama }}
-                            </option>
+                            </label>
                         @endforeach
-                    </select>
+                    </div>
+
                     <p class="text-xs text-gray-500 mt-1">
                         Abaikan jika promo untuk semua produk
                     </p>
                 </div>
+
 
                 <!-- STATUS -->
                 <div>

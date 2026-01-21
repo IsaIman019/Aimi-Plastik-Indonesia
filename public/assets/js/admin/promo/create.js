@@ -12,26 +12,29 @@ window.closeCreatePromoModal = function () {
 function resetCreateForm() {
     $("#createPromoForm")[0].reset();
     $("[id^=create_]").addClass("hidden").text("");
-    $("#produkSelect").prop("disabled", false);
+
+    $(".produk-checkbox").prop("checked", false).prop("disabled", false);
 }
 
 $("#isAllProduct").on("change", function () {
-    $("#produkSelect").prop("disabled", this.checked);
+    if (this.checked) {
+        $(".produk-checkbox").prop("checked", false).prop("disabled", true);
+    } else {
+        $(".produk-checkbox").prop("disabled", false);
+    }
 });
 
 $("#createPromoForm").on("submit", function (e) {
     e.preventDefault();
-    if (!$("#isAllProduct").is(":checked")) {
-        if ($("input[name='is_all_product_hidden']").length === 0) {
-            $("<input>")
-                .attr({
-                    type: "hidden",
-                    name: "is_all_product",
-                    value: 0,
-                })
-                .appendTo("#createPromoForm");
+    $("#isAllProduct").on("change", function () {
+        if (this.checked) {
+            $("#produkSelect").prop("disabled", true);
+            $("#produkSelect option").prop("selected", false);
+        } else {
+            $("#produkSelect").prop("disabled", false);
         }
-    }
+    });
+
     const btn = $("#createPromoSubmitBtn");
     btn.prop("disabled", true).text("Menyimpan...");
 
@@ -68,10 +71,4 @@ $("#createPromoForm").on("submit", function (e) {
         },
     });
 });
-$("#isAllProduct").on("change", function () {
-    $("#produkSelect").prop("disabled", this.checked);
-
-    if (this.checked) {
-        $("#produkSelect option").prop("selected", false);
-    }
-});
+$("#isAllProduct").on("change", function () {});
