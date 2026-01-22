@@ -117,6 +117,7 @@ Route::prefix('pelanggan')->middleware(['auth', 'role:pelanggan'])->group(functi
     // 1. Produk & Katalog
     Route::get('/produk', [PelangganProdukController::class, 'index'])->name('pelanggan.produk');
     Route::get('/produk/{id}', [PelangganProdukController::class, 'show'])->name('pelanggan.produk.show');
+    Route::get('/produk-all', [PelangganProdukController::class, 'all'])->name('pelanggan.produk.all');
 
     // 2. Keranjang Belanja
     Route::get('/keranjang', [KeranjangController::class, 'index'])->name('keranjang');
@@ -126,7 +127,7 @@ Route::prefix('pelanggan')->middleware(['auth', 'role:pelanggan'])->group(functi
     Route::delete('/keranjang-clear', [KeranjangController::class, 'clear'])->name('keranjang.clear');
     Route::get('/keranjang-total', [KeranjangController::class, 'getTotal'])->name('keranjang.total');
     Route::post('/keranjang/promo', [KeranjangController::class, 'getPromoByProduk'])
-    ->name('keranjang.promo');
+        ->name('keranjang.promo');
 
     // 3. Checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
