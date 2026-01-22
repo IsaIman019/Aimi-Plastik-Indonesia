@@ -125,6 +125,8 @@ Route::prefix('pelanggan')->middleware(['auth', 'role:pelanggan'])->group(functi
     Route::delete('/keranjang/{id}', [KeranjangController::class, 'destroy'])->name('keranjang.destroy');
     Route::delete('/keranjang-clear', [KeranjangController::class, 'clear'])->name('keranjang.clear');
     Route::get('/keranjang-total', [KeranjangController::class, 'getTotal'])->name('keranjang.total');
+    Route::post('/keranjang/promo', [KeranjangController::class, 'getPromoByProduk'])
+    ->name('keranjang.promo');
 
     // 3. Checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');

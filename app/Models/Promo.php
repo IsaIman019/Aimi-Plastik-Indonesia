@@ -16,6 +16,7 @@ class Promo extends Model
         'tanggal_mulai'   => 'date',
         'tanggal_selesai' => 'date',
         'is_all_product'  => 'boolean',
+        'jumlah' => 'float',
     ];
 
     public function produks()
@@ -27,4 +28,5 @@ class Promo extends Model
             'produk_id'
         );
     }
+
 }

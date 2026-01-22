@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pelanggan;
 use App\Http\Controllers\Controller;
 use App\Models\Keranjang;
 use App\Models\Produk;
+use App\Models\Promo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,12 +13,38 @@ class KeranjangController extends Controller
 {
     public function index()
     {
-        $keranjangs = Keranjang::with('produk')
+        $keranjangs = Keranjang::with(['produk.kategori'])
             ->where('user_id', Auth::id())
             ->get();
 
         return view('pelanggan.keranjang.index', compact('keranjangs'));
     }
+
+    public function getPromoByProduk(Request $request)
+{
+    $produkIds = $request->produk_ids;
+
+    if (empty($produkIds)) {
+        return response()->json([]);
+    }
+
+    $promos = Promo::where('status', 'ACTIVE')
+        ->whereDate('tanggal_mulai', '<=', now())
+        ->whereDate('tanggal_selesai', '>=', now())
+        ->whereHas('produks', function ($q) use ($produkIds) {
+            $q->whereIn('produk.id', $produkIds); 
+        })
+        ->with('produks:id,nama')
+        ->get();
+        
+
+    return response()->json($promos);
+}
+
+
+
+
+
 
     public function store(Request $request)
     {
@@ -49,7 +76,6 @@ class KeranjangController extends Controller
 
             $keranjang->update(['qty' => $totalQty]);
         } else {
-            // Buat baru jika belum ada
             Keranjang::create([
                 'user_id' => Auth::id(),
                 'produk_id' => $request->produk_id,
