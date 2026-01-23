@@ -25,7 +25,8 @@
             <aside class="w-full lg:w-1/4 flex-shrink-0 space-y-8">
 
                 {{-- FORM FILTER --}}
-                <form id="filterForm" action="{{ route('pelanggan.produk.all') }}" method="GET" autocomplete="off">
+                {{-- Action tetap ke 'all' agar saat filter harga ditekan, dia mencari di catalog global --}}
+                <form id="filterForm" action="{{ route('pelanggan.kategori.all') }}" method="GET" autocomplete="off">
 
                     {{-- Search Hidden --}}
                     @if(request('search'))
@@ -37,21 +38,19 @@
                         <h3 class="font-bold text-gray-900 text-lg mb-4 border-b border-gray-100 pb-2">Kategori</h3>
                         <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
 
-                            {{-- PERBAIKAN: Menambahkan kembali @foreach --}}
                             @foreach($kategoris as $kategori)
                             <div class="flex items-start">
                                 <div class="flex items-center h-5">
-                                    <input id="cat-{{ $kategori->id }}"
-                                        name="kategori[]"
-                                        value="{{ $kategori->id }}"
-                                        type="checkbox"
-                                        onchange="filterProduk()"
-                                        autocomplete="off"
-                                        {{ in_array($kategori->id, request('kategori', [])) ? 'checked' : '' }}
+                                    {{-- LOGIKA CHECKED DIPERBARUI --}}
+                                    <input id="cat-{{ $kategori->id }}" name="kategori[]" value="{{ $kategori->id }}"
+                                        type="checkbox" onchange="filterProduk()" autocomplete="off"
+                                        {{-- Cek jika ID ada di URL param OR jika ini halaman detail kategori tsb --}}
+                                        {{ (in_array($kategori->id, request('kategori', [])) || (isset($kategoriSelected) && $kategoriSelected->id == $kategori->id)) ? 'checked' : '' }}
                                         class="form-checkbox h-4 w-4 text-[#2c3e8c] border-gray-300 rounded focus:ring-[#2c3e8c] cursor-pointer">
                                 </div>
                                 <div class="ml-3 text-sm">
-                                    <label for="cat-{{ $kategori->id }}" class="font-medium text-gray-600 hover:text-[#2c3e8c] cursor-pointer transition select-none">
+                                    <label for="cat-{{ $kategori->id }}"
+                                        class="font-medium text-gray-600 hover:text-[#2c3e8c] cursor-pointer transition select-none">
                                         {{ $kategori->nama }}
                                         <span class="text-gray-400 text-xs ml-1">
                                             ({{ $kategori->produk_count ?? 0 }})
@@ -60,7 +59,6 @@
                                 </div>
                             </div>
                             @endforeach
-                            {{-- END PERBAIKAN --}}
 
                         </div>
                     </div>
@@ -69,26 +67,19 @@
                     <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
                         <h3 class="font-bold text-gray-900 text-lg mb-4 border-b border-gray-100 pb-2">Harga</h3>
                         <div class="flex items-center space-x-2 mb-3">
-                            <input type="text"
-                                id="min_price"
-                                name="min_price"
-                                placeholder="Rp Min"
-                                autocomplete="off"
+                            <input type="text" id="min_price" name="min_price" placeholder="Rp Min" autocomplete="off"
                                 value="{{ request('min_price') ? 'Rp ' . number_format(request('min_price'), 0, ',', '.') : '' }}"
                                 class="rupiah-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-[#2c3e8c] focus:border-[#2c3e8c]">
 
                             <span class="text-gray-400">-</span>
 
-                            <input type="text"
-                                id="max_price"
-                                name="max_price"
-                                placeholder="Rp Max"
-                                autocomplete="off"
+                            <input type="text" id="max_price" name="max_price" placeholder="Rp Max" autocomplete="off"
                                 value="{{ request('max_price') ? 'Rp ' . number_format(request('max_price'), 0, ',', '.') : '' }}"
                                 class="rupiah-input w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-[#2c3e8c] focus:border-[#2c3e8c]">
                         </div>
 
-                        <button type="button" onclick="filterProduk()" class="w-full mt-3 bg-[#2c3e8c] hover:bg-blue-900 text-white text-sm font-bold py-2 rounded-lg transition shadow-md">
+                        <button type="button" onclick="filterProduk()"
+                            class="w-full mt-3 bg-[#2c3e8c] hover:bg-blue-900 text-white text-sm font-bold py-2 rounded-lg transition shadow-md">
                             Terapkan Filter
                         </button>
                     </div>
@@ -99,14 +90,25 @@
             {{-- ================= MAIN CONTENT ================= --}}
             <div class="flex-1">
                 <div class="mb-6 flex justify-between items-end">
+
+                    {{-- BAGIAN JUDUL DINAMIS --}}
                     <div>
+                        @if(isset($kategoriSelected))
+                        {{-- TAMPILAN JIKA HALAMAN KATEGORI SPESIFIK --}}
+                        <h1 class="text-2xl font-bold text-gray-900">{{ $kategoriSelected->nama }}</h1>
+                        <p class="text-sm text-gray-500 mt-1">{{ $kategoriSelected->produk_count ?? $produks->total() }}
+                            produk ditemukan</p>
+                        @else
+                        {{-- TAMPILAN DEFAULT (SEMUA PRODUK) --}}
                         <h1 class="text-2xl font-bold text-gray-900">Semua Produk</h1>
                         <p class="text-sm text-gray-500 mt-1">Menampilkan {{ $produks->total() }} produk</p>
+                        @endif
                     </div>
 
                     {{-- Tombol Reset Filter --}}
                     @if(request('kategori') || request('min_price') || request('max_price'))
-                    <a href="{{ route('pelanggan.produk.all') }}" class="text-sm text-red-500 hover:text-red-700 underline font-medium">
+                    <a href="{{ route('pelanggan.kategori.all') }}"
+                        class="text-sm text-red-500 hover:text-red-700 underline font-medium">
                         Hapus Filter
                     </a>
                     @endif
@@ -116,7 +118,8 @@
                 @if($produks->count() > 0)
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                     @foreach($produks as $produk)
-                    <div class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 relative group flex flex-col h-full">
+                    <div
+                        class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 relative group flex flex-col h-full">
                         <a href="{{ route('pelanggan.produk.show', $produk->id) }}" class="flex-1 flex flex-col">
                             <div class="relative w-full pt-[100%] bg-white rounded-t-xl overflow-hidden">
                                 @if($produk->image)
@@ -125,16 +128,23 @@
                                 @else
                                 <div class="absolute inset-0 flex items-center justify-center text-gray-300">
                                     <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
                                     </svg>
                                 </div>
                                 @endif
 
-                                <div class="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 translate-y-2 group-hover:translate-y-0">
+                                <div
+                                    class="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 translate-y-2 group-hover:translate-y-0">
                                     <div class="flex-1">
-                                        <button type="button" onclick="event.preventDefault(); document.getElementById('add-to-cart-{{ $produk->id }}').submit();" class="w-full bg-[#2c3e8c] text-white text-xs font-bold py-2 px-2 rounded-lg hover:bg-blue-800 flex items-center justify-center gap-1 shadow-md transition transform active:scale-95">
+                                        <button type="button"
+                                            onclick="event.preventDefault(); document.getElementById('add-to-cart-{{ $produk->id }}').submit();"
+                                            class="w-full bg-[#2c3e8c] text-white text-xs font-bold py-2 px-2 rounded-lg hover:bg-blue-800 flex items-center justify-center gap-1 shadow-md transition transform active:scale-95">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                                                </path>
                                             </svg>
                                             +Keranjang
                                         </button>
@@ -142,7 +152,8 @@
                                 </div>
                             </div>
                             <div class="p-4 flex flex-col flex-1">
-                                <h3 class="text-sm text-gray-500 font-medium line-clamp-2 leading-tight mb-2 group-hover:text-[#2c3e8c] transition h-10">
+                                <h3
+                                    class="text-sm text-gray-500 font-medium line-clamp-2 leading-tight mb-2 group-hover:text-[#2c3e8c] transition h-10">
                                     {{ $produk->nama }}
                                 </h3>
                                 <div class="mt-auto">
@@ -154,7 +165,8 @@
                         </a>
                     </div>
 
-                    <form id="add-to-cart-{{ $produk->id }}" action="{{ route('keranjang.store') }}" method="POST" class="hidden">
+                    <form id="add-to-cart-{{ $produk->id }}" action="{{ route('keranjang.store') }}" method="POST"
+                        class="hidden">
                         @csrf
                         <input type="hidden" name="produk_id" value="{{ $produk->id }}">
                         <input type="hidden" name="quantity" value="1">
@@ -167,15 +179,20 @@
                 </div>
                 @else
                 {{-- Empty State --}}
-                <div class="flex flex-col items-center justify-center py-16 text-center bg-white rounded-xl border border-dashed border-gray-300">
+                <div
+                    class="flex flex-col items-center justify-center py-16 text-center bg-white rounded-xl border border-dashed border-gray-300">
                     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                            </path>
                         </svg>
                     </div>
                     <h3 class="text-lg font-bold text-gray-900 mb-1">Produk tidak ditemukan</h3>
-                    <p class="text-gray-500 text-sm max-w-xs mx-auto">Coba ubah filter kategori atau kata kunci pencarian Anda.</p>
-                    <a href="{{ route('pelanggan.produk.all') }}" class="mt-4 px-4 py-2 bg-[#2c3e8c] text-white text-sm font-bold rounded-lg hover:bg-blue-800 transition">
+                    <p class="text-gray-500 text-sm max-w-xs mx-auto">Coba ubah filter kategori atau kata kunci
+                        pencarian Anda.</p>
+                    <a href="{{ route('pelanggan.kategori.all') }}"
+                        class="mt-4 px-4 py-2 bg-[#2c3e8c] text-white text-sm font-bold rounded-lg hover:bg-blue-800 transition">
                         Reset Filter
                     </a>
                 </div>
@@ -238,7 +255,10 @@
         // Sync Checkbox
         const activeCategories = urlParams.getAll('kategori[]');
         document.querySelectorAll('input[name="kategori[]"]').forEach(checkbox => {
-            checkbox.checked = activeCategories.includes(checkbox.value);
+            // Cek jika kategori juga sedang dipilih lewat controller (halaman detail)
+            // Logika checkbox sudah ditangani di HTML, ini hanya pelengkap untuk navigasi history
+            checkbox.checked = activeCategories.includes(checkbox.value) || checkbox.getAttribute(
+                'checked') === 'checked';
         });
 
         // Sync Min Price

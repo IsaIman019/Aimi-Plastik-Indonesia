@@ -222,7 +222,7 @@
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
             <div>
                 <span class="text-orange-500 font-bold tracking-wide uppercase text-sm">Katalog Pilihan</span>
-                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">Produk Terlaris Kami</h2>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">Produk Terlaris Kam</h2>
                 <p class="mt-3 text-gray-500 max-w-xl">Temukan berbagai kebutuhan packing mulai dari lakban, bubble
                     wrap, hingga kardus dengan kualitas terbaik.</p>
             </div>

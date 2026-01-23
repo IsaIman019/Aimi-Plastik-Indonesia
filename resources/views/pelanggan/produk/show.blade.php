@@ -36,14 +36,15 @@
                     <span class="mx-1 text-gray-400">/</span>
                 </li>
                 <li>
-                    <a href="{{ route('pelanggan.produk.all') }}" class="hover:text-[#2c3e8c]">Produk</a>
+                    <a href="{{ route('pelanggan.kategori.all') }}" class="hover:text-[#2c3e8c]">Produk</a>
                 </li>
                 @if($produk->kategori)
                 <li>
                     <span class="mx-1 text-gray-400">/</span>
                 </li>
                 <li>
-                    <a href="{{ route('pelanggan.produk.all', ['kategori[]' => $produk->kategori_id]) }}" class="hover:text-[#2c3e8c]">{{ $produk->kategori->nama }}</a>
+                    <a href="{{ route('pelanggan.kategori.all', ['kategori[]' => $produk->kategori_id]) }}"
+                        class="hover:text-[#2c3e8c]">{{ $produk->kategori->nama }}</a>
                 </li>
                 @endif
                 <li>
@@ -65,11 +66,14 @@
                     {{-- <span class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">25%</span> --}}
 
                     @if($produk->image)
-                    <img id="mainImage" src="{{ asset('storage/' . $produk->image) }}" alt="{{ $produk->nama }}" class="w-full h-auto object-contain p-4 transition-transform duration-500 group-hover:scale-110 cursor-zoom-in">
+                    <img id="mainImage" src="{{ asset('storage/' . $produk->image) }}" alt="{{ $produk->nama }}"
+                        class="w-full h-auto object-contain p-4 transition-transform duration-500 group-hover:scale-110 cursor-zoom-in">
                     @else
                     <div class="w-full h-96 flex items-center justify-center bg-gray-50 text-gray-400">
                         <svg class="w-20 h-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
                         </svg>
                     </div>
                     @endif
@@ -95,7 +99,9 @@
                 <div class="flex items-center gap-2 mb-4 text-sm">
                     <div class="flex text-yellow-400">
                         <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            <path
+                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                            </path>
                         </svg>
                         <span class="text-gray-600 font-bold ml-1">5.0</span>
                     </div>
@@ -105,7 +111,8 @@
 
                 {{-- Harga --}}
                 <div class="mb-6">
-                    <h2 class="text-3xl font-bold text-[#2c3e8c]">Rp {{ number_format($produk->harga, 0, ',', '.') }}</h2>
+                    <h2 class="text-3xl font-bold text-[#2c3e8c]">Rp {{ number_format($produk->harga, 0, ',', '.') }}
+                    </h2>
                 </div>
 
                 {{-- Form Add to Cart --}}
@@ -116,23 +123,31 @@
                     <div class="flex items-center gap-4 mb-6">
                         {{-- Input Quantity --}}
                         <div class="flex items-center border border-gray-300 rounded-lg w-32">
-                            <button type="button" onclick="decrementValue()" class="w-10 h-10 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-l-lg flex items-center justify-center font-bold text-lg">-</button>
-                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ $produk->stok }}" class="flex-1 w-full text-center border-none focus:ring-0 text-gray-800 font-bold h-10 p-0">
-                            <button type="button" onclick="incrementValue()" class="w-10 h-10 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-r-lg flex items-center justify-center font-bold text-lg">+</button>
+                            <button type="button" onclick="decrementValue()"
+                                class="w-10 h-10 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-l-lg flex items-center justify-center font-bold text-lg">-</button>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1"
+                                max="{{ $produk->stok }}"
+                                class="flex-1 w-full text-center border-none focus:ring-0 text-gray-800 font-bold h-10 p-0">
+                            <button type="button" onclick="incrementValue()"
+                                class="w-10 h-10 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-r-lg flex items-center justify-center font-bold text-lg">+</button>
                         </div>
                         <span class="text-sm text-gray-500">Stok: <b>{{ $produk->stok }}</b></span>
                     </div>
 
                     <div class="flex gap-3">
                         @if($produk->stok > 0)
-                        <button type="submit" class="flex-1 bg-[#2c3e8c] text-white font-bold py-3 rounded-lg hover:bg-blue-900 transition flex items-center justify-center gap-2 shadow-md">
+                        <button type="submit"
+                            class="flex-1 bg-[#2c3e8c] text-white font-bold py-3 rounded-lg hover:bg-blue-900 transition flex items-center justify-center gap-2 shadow-md">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                                </path>
                             </svg>
                             Keranjang
                         </button>
                         @else
-                        <button disabled class="flex-1 bg-gray-300 text-gray-500 font-bold py-3 rounded-lg cursor-not-allowed">
+                        <button disabled
+                            class="flex-1 bg-gray-300 text-gray-500 font-bold py-3 rounded-lg cursor-not-allowed">
                             Stok Habis
                         </button>
                         @endif
@@ -163,7 +178,8 @@
                 @foreach($produkTerkaits as $related)
 
                 {{-- CARD PRODUK (Style Index) --}}
-                <div class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 relative group flex flex-col h-full">
+                <div
+                    class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 relative group flex flex-col h-full">
 
                     {{-- Link Wrapper --}}
                     <a href="{{ route('pelanggan.produk.show', $related->id) }}" class="flex-1 flex flex-col">
@@ -178,20 +194,27 @@
                             @else
                             <div class="absolute inset-0 flex items-center justify-center text-gray-300">
                                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
                                 </svg>
                             </div>
                             @endif
 
                             {{-- HOVER ACTIONS (Keranjang & Mata) --}}
-                            <div class="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 translate-y-2 group-hover:translate-y-0">
+                            <div
+                                class="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 translate-y-2 group-hover:translate-y-0">
 
                                 {{-- Tombol Keranjang --}}
                                 <div class="flex-1">
                                     {{-- Gunakan onclick preventDefault agar tidak pindah halaman saat klik tombol ini --}}
-                                    <button type="button" onclick="event.preventDefault(); document.getElementById('add-to-cart-related-{{ $related->id }}').submit();" class="w-full bg-[#2c3e8c] text-white text-xs font-bold py-2 px-2 rounded-lg hover:bg-blue-800 flex items-center justify-center gap-1 shadow-md transition transform active:scale-95">
+                                    <button type="button"
+                                        onclick="event.preventDefault(); document.getElementById('add-to-cart-related-{{ $related->id }}').submit();"
+                                        class="w-full bg-[#2c3e8c] text-white text-xs font-bold py-2 px-2 rounded-lg hover:bg-blue-800 flex items-center justify-center gap-1 shadow-md transition transform active:scale-95">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                                            </path>
                                         </svg>
                                         +Keranjang
                                     </button>
@@ -203,7 +226,8 @@
 
                         {{-- Details --}}
                         <div class="p-3 flex flex-col flex-1">
-                            <h3 class="text-sm text-gray-500 font-medium line-clamp-2 leading-tight mb-2 group-hover:text-[#2c3e8c] transition h-10">
+                            <h3
+                                class="text-sm text-gray-500 font-medium line-clamp-2 leading-tight mb-2 group-hover:text-[#2c3e8c] transition h-10">
                                 {{ $related->nama }}
                             </h3>
 
@@ -217,7 +241,9 @@
                             {{-- Rating Static --}}
                             <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
                                 <svg class="w-3 h-3 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                    </path>
                                 </svg>
                                 <span>5.0 (2)</span>
                             </div>
@@ -226,7 +252,8 @@
                 </div>
 
                 {{-- Form Hidden untuk Keranjang (ID Unik untuk Related) --}}
-                <form id="add-to-cart-related-{{ $related->id }}" action="{{ route('keranjang.store') }}" method="POST" class="hidden">
+                <form id="add-to-cart-related-{{ $related->id }}" action="{{ route('keranjang.store') }}" method="POST"
+                    class="hidden">
                     @csrf
                     <input type="hidden" name="produk_id" value="{{ $related->id }}">
                     <input type="hidden" name="quantity" value="1">
@@ -242,7 +269,8 @@
             <h2 class="text-xl font-bold text-gray-900 mb-4">Ulasan Pembeli</h2>
             <div class="bg-blue-50/50 p-6 rounded-xl flex items-center gap-4">
                 <div class="text-center">
-                    <p class="text-3xl font-bold text-[#2c3e8c]">5.0<span class="text-sm text-gray-400 font-normal">/5.0</span></p>
+                    <p class="text-3xl font-bold text-[#2c3e8c]">5.0<span
+                            class="text-sm text-gray-400 font-normal">/5.0</span></p>
                     <p class="text-xs text-gray-500">1 orang telah mengulas</p>
                 </div>
                 {{-- List Ulasan (Bisa di-looping jika ada datanya) --}}
