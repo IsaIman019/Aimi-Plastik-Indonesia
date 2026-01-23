@@ -222,7 +222,7 @@
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
             <div>
                 <span class="text-orange-500 font-bold tracking-wide uppercase text-sm">Katalog Pilihan</span>
-                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">Produk Terlaris Kam</h2>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-2">Produk Terlaris Kami</h2>
                 <p class="mt-3 text-gray-500 max-w-xl">Temukan berbagai kebutuhan packing mulai dari lakban, bubble
                     wrap, hingga kardus dengan kualitas terbaik.</p>
             </div>
@@ -238,105 +238,80 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             @forelse($featuredProducts ?? [] as $product)
             <div
-                class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full relative">
-                <div class="absolute top-4 left-4 z-10">
-                    <span
-                        class="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">Best
-                        Seller</span>
-                </div>
+                class="min-w-[180px] md:min-w-[220px] max-w-[220px] bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 flex-shrink-0 relative group snap-start">
+                <a href="{{ route('pelanggan.produk.show', $product->id) }}">
 
-                {{-- IMAGE CONTAINER --}}
-                <div
-                    class="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-100 group-hover:opacity-90 h-64 relative p-4 flex items-center justify-center">
-                    @if($product->image)
-                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
-                        class="max-h-full w-auto object-contain transition duration-300 group-hover:scale-105">
-                    @else
-                    <div class="h-full w-full flex items-center justify-center text-gray-300">
-                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                            </path>
-                        </svg>
-                    </div>
-                    @endif
+                    {{-- IMAGE CONTAINER --}}
+                    <div class="relative w-full pt-[100%] bg-white rounded-t-xl overflow-hidden">
 
-                    {{-- OVERLAY BUTTONS --}}
-                    <div
-                        class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition duration-300 bg-black/10 backdrop-blur-[2px]">
-
-                        {{-- Tombol Preview --}}
-                        <button type="button" onclick="openPreviewModal(this)"
-                            data-product="{{ json_encode($product) }}"
-                            class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-orange-600 hover:shadow-lg transition transform hover:-translate-y-1"
-                            title="Lihat Detail">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {{-- Product Image --}}
+                        @if($product->image)
+                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->nama }}"
+                            class="absolute inset-0 w-full h-full object-contain p-6 group-hover:scale-105 transition duration-500">
+                        @else
+                        <div class="absolute inset-0 flex items-center justify-center text-gray-300">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
                                 </path>
                             </svg>
-                        </button>
+                        </div>
+                        @endif
 
-                        {{-- Tombol Quick Cart --}}
-                        @auth
-                        <form action="{{ route('keranjang.store') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                            <input type="hidden" name="quantity" value="1">
-                            <button type="submit"
-                                class="w-10 h-10 bg-orange-600 rounded-full flex items-center justify-center text-white hover:bg-orange-700 hover:shadow-lg transition transform hover:-translate-y-1"
-                                title="Tambah ke Keranjang">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
-                                    </path>
-                                </svg>
-                            </button>
-                        </form>
-                        @else
-                        <a href="{{ route('login') }}"
-                            class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-orange-600 hover:shadow-lg transition"
-                            title="Login untuk Belanja">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
-                        </a>
-                        @endauth
+                        {{-- HOVER ACTION: ADD TO CART --}}
+                        {{-- Tombol hanya muncul jika stok > 0 --}}
+                        @if($product->stok > 0)
+                        <div
+                            class="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 translate-y-2 group-hover:translate-y-0">
+                            <form action="{{ route('keranjang.store') }}" method="POST" class="flex-1">
+                                @csrf
+                                <input type="hidden" name="produk_id" value="{{ $product->id }}">
+                                <input type="hidden" name="quantity" value="1">
+
+                                <button type="submit"
+                                    class="w-full bg-[#2c3e8c] text-white text-xs font-bold py-2 px-2 rounded-lg hover:bg-blue-800 flex items-center justify-center gap-1 shadow-md">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                                        </path>
+                                    </svg>
+                                    +Keranjang
+                                </button>
+                            </form>
+                        </div>
+                        @endif
                     </div>
-                </div>
 
-                <div class="p-5 flex flex-col grow">
-                    <div class="grow">
-                        <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 min-h-14 group-hover:text-orange-500 transition-colors cursor-pointer"
-                            onclick="openPreviewModal(this)" data-product="{{ json_encode($product) }}">
-                            {{ $product->name }}
+                    {{-- PRODUCT INFO --}}
+                    <div class="p-4">
+                        <h3
+                            class="text-sm text-gray-500 font-medium line-clamp-2 h-10 leading-tight mb-2 group-hover:text-blue-900 transition">
+                            {{ $product->nama }}
                         </h3>
-                        <div class="flex items-center justify-between mb-4">
-                            <p class="text-orange-600 font-bold text-xl">Rp
-                                {{ number_format($product->price, 0, ',', '.') }}
-                            </p>
-                            @if($product->stock > 0)
+
+                        {{-- Container Harga & Stok --}}
+                        <div class="flex items-center justify-between mb-2">
+
+                            {{-- Harga --}}
+                            <span class="text-[#2c3e8c] font-bold text-base">
+                                Rp {{ number_format($product->harga, 0, ',', '.') }}
+                            </span>
+
+                            {{-- Indikator Stok --}}
+                            @if($product->stok > 0)
                             <span
-                                class="text-[10px] font-bold text-green-600 bg-green-100 px-2 py-1 rounded-full">Ready:
-                                {{ $product->stock }}</span>
+                                class="text-[10px] font-medium text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-100">
+                                Stok: {{ $product->stok }}
+                            </span>
                             @else
                             <span
-                                class="text-[10px] font-bold text-red-600 bg-red-100 px-2 py-1 rounded-full">Habis</span>
+                                class="text-[10px] font-medium text-red-700 bg-red-50 px-2 py-0.5 rounded border border-red-100">
+                                Habis
+                            </span>
                             @endif
                         </div>
                     </div>
-
-                    <div class="pt-4 border-t border-gray-100">
-                        <button type="button" onclick="openPreviewModal(this)"
-                            data-product="{{ json_encode($product) }}"
-                            class="block w-full text-center px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-bold hover:bg-orange-500 transition duration-300">
-                            Detail & Beli
-                        </button>
-                    </div>
-                </div>
+                </a>
             </div>
             @empty
             <div class="col-span-4 text-center py-16 bg-white rounded-3xl border-2 border-dashed border-gray-200">

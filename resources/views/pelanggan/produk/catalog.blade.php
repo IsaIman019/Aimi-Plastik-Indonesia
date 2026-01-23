@@ -25,7 +25,6 @@
             <aside class="w-full lg:w-1/4 flex-shrink-0 space-y-8">
 
                 {{-- FORM FILTER --}}
-                {{-- Action tetap ke 'all' agar saat filter harga ditekan, dia mencari di catalog global --}}
                 <form id="filterForm" action="{{ route('pelanggan.kategori.all') }}" method="GET" autocomplete="off">
 
                     {{-- Search Hidden --}}
@@ -41,10 +40,8 @@
                             @foreach($kategoris as $kategori)
                             <div class="flex items-start">
                                 <div class="flex items-center h-5">
-                                    {{-- LOGIKA CHECKED DIPERBARUI --}}
                                     <input id="cat-{{ $kategori->id }}" name="kategori[]" value="{{ $kategori->id }}"
                                         type="checkbox" onchange="filterProduk()" autocomplete="off"
-                                        {{-- Cek jika ID ada di URL param OR jika ini halaman detail kategori tsb --}}
                                         {{ (in_array($kategori->id, request('kategori', [])) || (isset($kategoriSelected) && $kategoriSelected->id == $kategori->id)) ? 'checked' : '' }}
                                         class="form-checkbox h-4 w-4 text-[#2c3e8c] border-gray-300 rounded focus:ring-[#2c3e8c] cursor-pointer">
                                 </div>
@@ -94,12 +91,10 @@
                     {{-- BAGIAN JUDUL DINAMIS --}}
                     <div>
                         @if(isset($kategoriSelected))
-                        {{-- TAMPILAN JIKA HALAMAN KATEGORI SPESIFIK --}}
                         <h1 class="text-2xl font-bold text-gray-900">{{ $kategoriSelected->nama }}</h1>
                         <p class="text-sm text-gray-500 mt-1">{{ $kategoriSelected->produk_count ?? $produks->total() }}
                             produk ditemukan</p>
                         @else
-                        {{-- TAMPILAN DEFAULT (SEMUA PRODUK) --}}
                         <h1 class="text-2xl font-bold text-gray-900">Semua Produk</h1>
                         <p class="text-sm text-gray-500 mt-1">Menampilkan {{ $produks->total() }} produk</p>
                         @endif
@@ -121,6 +116,8 @@
                     <div
                         class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 relative group flex flex-col h-full">
                         <a href="{{ route('pelanggan.produk.show', $produk->id) }}" class="flex-1 flex flex-col">
+
+                            {{-- IMAGE CONTAINER --}}
                             <div class="relative w-full pt-[100%] bg-white rounded-t-xl overflow-hidden">
                                 @if($produk->image)
                                 <img src="{{ asset('storage/' . $produk->image) }}" alt="{{ $produk->nama }}"
@@ -135,6 +132,8 @@
                                 </div>
                                 @endif
 
+                                {{-- HOVER BUTTON (Hanya muncul jika stok > 0) --}}
+                                @if($produk->stok > 0)
                                 <div
                                     class="absolute bottom-3 left-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 translate-y-2 group-hover:translate-y-0">
                                     <div class="flex-1">
@@ -150,27 +149,49 @@
                                         </button>
                                     </div>
                                 </div>
+                                @endif
                             </div>
+
+                            {{-- PRODUCT INFO --}}
                             <div class="p-4 flex flex-col flex-1">
                                 <h3
                                     class="text-sm text-gray-500 font-medium line-clamp-2 leading-tight mb-2 group-hover:text-[#2c3e8c] transition h-10">
                                     {{ $produk->nama }}
                                 </h3>
-                                <div class="mt-auto">
+
+                                {{-- HARGA & STOK --}}
+                                <div class="mt-auto flex items-center justify-between">
                                     <span class="text-[#2c3e8c] font-bold text-base">
                                         Rp {{ number_format($produk->harga, 0, ',', '.') }}
                                     </span>
+
+                                    {{-- Badge Stok --}}
+                                    @if($produk->stok > 0)
+                                    <span
+                                        class="text-[10px] font-medium text-green-700 bg-green-50 px-2 py-0.5 rounded border border-green-100">
+                                        Stok: {{ $produk->stok }}
+                                    </span>
+                                    @else
+                                    <span
+                                        class="text-[10px] font-medium text-red-700 bg-red-50 px-2 py-0.5 rounded border border-red-100">
+                                        Habis
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
                         </a>
                     </div>
 
+                    {{-- Hidden Form for Cart --}}
+                    @if($produk->stok > 0)
                     <form id="add-to-cart-{{ $produk->id }}" action="{{ route('keranjang.store') }}" method="POST"
                         class="hidden">
                         @csrf
                         <input type="hidden" name="produk_id" value="{{ $produk->id }}">
                         <input type="hidden" name="quantity" value="1">
                     </form>
+                    @endif
+
                     @endforeach
                 </div>
 
@@ -255,8 +276,6 @@
         // Sync Checkbox
         const activeCategories = urlParams.getAll('kategori[]');
         document.querySelectorAll('input[name="kategori[]"]').forEach(checkbox => {
-            // Cek jika kategori juga sedang dipilih lewat controller (halaman detail)
-            // Logika checkbox sudah ditangani di HTML, ini hanya pelengkap untuk navigasi history
             checkbox.checked = activeCategories.includes(checkbox.value) || checkbox.getAttribute(
                 'checked') === 'checked';
         });
