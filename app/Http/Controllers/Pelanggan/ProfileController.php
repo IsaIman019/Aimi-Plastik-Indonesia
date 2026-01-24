@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Pelanggan;
 
 use App\Http\Controllers\Controller;
-use App\Models\User; // Pastikan import User ada
+use App\Models\Pesanan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,9 +16,9 @@ class ProfileController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        
+
         // Hitung pesanan aktif (pending/processed) untuk badge notifikasi
-        $pendingOrders = \App\Models\Order::where('user_id', $user->id)
+        $pendingOrders = Pesanan::where('user_id', $user->id)
             ->whereIn('status', ['pending', 'processed'])
             ->count();
 
@@ -26,46 +27,39 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        // -----------------------------------------------------------
-        // PERBAIKAN DI SINI (Menambahkan Type Hinting)
-        // -----------------------------------------------------------
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        // 1. Validasi
         $request->validate([
-            'name'      => 'required|string|max:255',
-            'phone'     => 'nullable|string|max:15',
-            'address'   => 'nullable|string|max:500', 
+            'name'      => 'required|string|max:255', // Input form bernama 'name'
+            'phone'     => 'nullable|string|max:15',  // Sesuai varchar(15) di DB
             'avatar'    => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'password'  => 'nullable|min:8|confirmed',
         ]);
 
-        // 1. Update Data Dasar
-        $user->name = $request->name;
-        $user->phone = $request->phone;
-        // Jika user belum pakai fitur Alamat Ganda, simpan di kolom address biasa
-        // (Opsional: Jika sudah pakai tabel addresses, baris ini bisa dihapus/disesuaikan)
-        $user->address = $request->address; 
+        // 2. Mapping Input ke Database
+        // KIRI: Nama Kolom DB (nama) | KANAN: Nama Input Form (name)
+        $user->nama = $request->name;
 
-        // 2. Update Foto Profil
+        $user->phone = $request->phone;
+
+        // 3. Update Foto
         if ($request->hasFile('avatar')) {
-            // Hapus foto lama jika ada
             if ($user->avatar && Storage::exists('public/' . $user->avatar)) {
                 Storage::delete('public/' . $user->avatar);
             }
-            // Simpan foto baru
             $path = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = $path;
+            $user->avatar = $path; // Menyimpan path string ke kolom avatar
         }
 
-        // 3. Update Password (Jika diisi)
+        // 4. Update Password
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
 
-        // Sekarang error 'Undefined method save' akan hilang
-        $user->save(); 
+        $user->save();
 
-        return back()->with('success', 'Profil berhasil diperbarui!');
+        return back()->with('success', 'Biodata berhasil diperbarui!');
     }
 }

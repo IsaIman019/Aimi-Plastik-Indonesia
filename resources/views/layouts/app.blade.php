@@ -135,7 +135,7 @@
                     <div class="h-6 w-px bg-gray-200 mx-2 hidden sm:block"></div>
 
                     @auth
-                    @if(Auth::user()->role === 'admin')
+                    @if(Auth::user()->role === 'Admin')
                     <a href="{{ route('admin.dashboard') }}"
                         class="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-full text-xs font-bold hover:bg-gray-800 transition shadow-lg">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,11 +174,11 @@
                             class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right z-50">
                             <div class="px-4 py-3 border-b border-gray-50">
                                 <p class="text-xs text-gray-500">Halo,</p>
-                                <p class="text-sm font-bold text-gray-900 truncate">{{ Auth::user()->name }}</p>
+                                <p class="text-sm font-bold text-gray-900 truncate">{{ Auth::user()->nama }}</p>
                             </div>
 
                             {{-- MENU PROFIL PELANGGAN (UPDATE) --}}
-                            @if(Auth::user()->role === 'pelanggan')
+                            @if(Auth::user()->role === 'Pelanggan')
                             <a href="{{ route('pelanggan.profile') }}"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 border-b border-gray-50">
                                 Akun Saya
