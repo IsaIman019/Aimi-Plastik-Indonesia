@@ -16,16 +16,16 @@
             {{-- SIDEBAR --}}
             <div class="w-full lg:w-1/4">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
-                        @if(Auth::user()->avatar)
-                            <img src="{{ asset('storage/' . Auth::user()->avatar) }}" class="w-full h-full object-cover">
+                    <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200 border border-gray-300">
+                        @if($user->avatar)
+                        <img src="{{ asset('storage/' . $user->avatar) }}" class="w-full h-full object-cover">
                         @else
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=random" class="w-full h-full object-cover">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode($user->nama) }}&background=random"
+                            class="w-full h-full object-cover">
                         @endif
                     </div>
                     <div class="overflow-hidden">
-                        <h3 class="font-bold text-gray-900 truncate">{{ Auth::user()->name }}</h3>
-                        <p class="text-xs text-gray-500 truncate">Member Pelanggan</p>
+                        <h3 class="font-bold text-gray-900 truncate">{{ $user->nama }}</h3>
                     </div>
                 </div>
 
@@ -43,6 +43,18 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                             Alamat Pengiriman
                         </a>
+                        <form action="{{ route('logout') }}" method="POST" class="border-t border-gray-100">
+                            @csrf
+                            <button type="submit"
+                                class="w-full flex items-center gap-3 px-6 py-4 text-sm font-medium text-red-600 hover:bg-red-50 transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                    </path>
+                                </svg>
+                                Keluar
+                            </button>
+                        </form>
                     </nav>
                 </div>
             </div>
@@ -53,7 +65,7 @@
                     
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-gray-900">Alamat Pengiriman</h2>
-                        <button onclick="openModal('addModal')" class="bg-gray-900 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-orange-600 transition shadow-lg">
+                        <button onclick="openModal('addModal')" class="bg-gray-900 text-white px-5 py-2.5 rounded-xl font-bold text-sm bg-orange-600 transition shadow-lg">
                             + Tambah Alamat
                         </button>
                     </div>
@@ -120,41 +132,96 @@
 </div>
 
 {{-- MODAL TAMBAH ALAMAT (FIXED CLASS) --}}
-<div id="addModal" class="fixed inset-0 z-50 hidden bg-gray-900/50 backdrop-blur-sm items-center justify-center p-4">
-    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-6 relative">
-        <button onclick="closeModal('addModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+<div id="addModal" class="fixed inset-0 z-50 hidden bg-gray-900/50 backdrop-blur-sm">
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-6 relative
+                    max-h-[90vh] overflow-y-auto">        <button onclick="closeModal('addModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
         <h3 class="text-xl font-bold text-gray-900 mb-6">Tambah Alamat Baru</h3>
         
         <form action="{{ route('pelanggan.address.store') }}" method="POST" class="space-y-4">
             @csrf
+
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-1">Label Alamat</label>
-                <input type="text" name="label" placeholder="Contoh: Rumah, Kantor, Kost" class="w-full border-gray-300 rounded-lg" required>
+                <input type="text" name="label" class="w-full border-gray-300 rounded-lg" placeholder="Rumah / Kantor" required>
             </div>
+
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">Nama Penerima</label>
-                    <input type="text" name="recipient_name" class="w-full border-gray-300 rounded-lg" required>
+                    <input type="text" name="nama_penerima" class="w-full border-gray-300 rounded-lg" required>
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">Nomor HP</label>
                     <input type="text" name="phone" class="w-full border-gray-300 rounded-lg" required>
                 </div>
             </div>
+
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-1">Alamat Lengkap</label>
-                <textarea name="full_address" rows="3" class="w-full border-gray-300 rounded-lg" placeholder="Jalan, No. Rumah, RT/RW, Kecamatan, Kota, Kode Pos" required></textarea>
+                <textarea name="alamat_lengkap" rows="3" class="w-full border-gray-300 rounded-lg" required></textarea>
             </div>
-            <button type="submit" class="w-full bg-orange-600 text-white py-3 rounded-xl font-bold hover:bg-orange-700 transition">Simpan Alamat</button>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Provinsi</label>
+                    <input type="text" name="provinsi" class="w-full border-gray-300 rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
+                    <input type="text" name="kota" class="w-full border-gray-300 rounded-lg" required>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Kecamatan</label>
+                    <input type="text" name="kecamatan" class="w-full border-gray-300 rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">RT</label>
+                    <input type="text" name="rt" class="w-full border-gray-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">RW</label>
+                    <input type="text" name="rw" class="w-full border-gray-300 rounded-lg">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">Kode Pos</label>
+                <input type="text" name="kode_pos" class="w-full border-gray-300 rounded-lg" required>
+            </div>
+
+            {{-- MAP --}}
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">Titik Lokasi</label>
+                <div id="map" class="w-full h-48 rounded-lg border"></div>
+
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
+            </div>
+
+            <div class="flex items-center gap-2">
+                <input type="checkbox" name="is_utama" value="1" class="rounded">
+                <label class="text-sm text-gray-700">Jadikan alamat utama</label>
+            </div>
+
+            <button type="submit" class="w-full bg-orange-600 text-white py-3 rounded-xl font-bold hover:bg-orange-700 transition">
+                Simpan Alamat
+            </button>
         </form>
+        </div>
     </div>
 </div>
 
 {{-- MODAL EDIT ALAMAT (FIXED CLASS) --}}
-<div id="editModal" class="fixed inset-0 z-50 hidden bg-gray-900/50 backdrop-blur-sm items-center justify-center p-4">
-    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-6 relative">
+<div id="editModal" class="fixed inset-0 z-50 hidden bg-gray-900/50 backdrop-blur-sm">
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl p-6 relative
+                    max-h-[90vh] overflow-y-auto">
         <button onclick="closeModal('editModal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
@@ -163,62 +230,163 @@
         <form id="editForm" method="POST" class="space-y-4">
             @csrf
             @method('PUT')
-            
-            <input type="hidden" id="edit_id">
+
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-1">Label Alamat</label>
                 <input type="text" name="label" id="edit_label" class="w-full border-gray-300 rounded-lg" required>
             </div>
+
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">Nama Penerima</label>
-                    <input type="text" name="recipient_name" id="edit_recipient_name" class="w-full border-gray-300 rounded-lg" required>
+                    <input type="text" name="nama_penerima" id="edit_nama_penerima" class="w-full border-gray-300 rounded-lg" required>
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1">Nomor HP</label>
                     <input type="text" name="phone" id="edit_phone" class="w-full border-gray-300 rounded-lg" required>
                 </div>
             </div>
+
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-1">Alamat Lengkap</label>
-                <textarea name="full_address" id="edit_full_address" rows="3" class="w-full border-gray-300 rounded-lg" required></textarea>
+                <textarea name="alamat_lengkap" id="edit_alamat_lengkap" rows="3" class="w-full border-gray-300 rounded-lg" required></textarea>
             </div>
-            <button type="submit" class="w-full bg-gray-900 text-white py-3 rounded-xl font-bold hover:bg-orange-600 transition">Simpan Perubahan</button>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Provinsi</label>
+                    <input type="text" name="provinsi" id="edit_provinsi" class="w-full border-gray-300 rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Kota / Kabupaten</label>
+                    <input type="text" name="kota" id="edit_kota" class="w-full border-gray-300 rounded-lg" required>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">Kecamatan</label>
+                    <input type="text" name="kecamatan" id="edit_kecamatan" class="w-full border-gray-300 rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">RT</label>
+                    <input type="text" name="rt" id="edit_rt" class="w-full border-gray-300 rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1">RW</label>
+                    <input type="text" name="rw" id="edit_rw" class="w-full border-gray-300 rounded-lg">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">Kode Pos</label>
+                <input type="text" name="kode_pos" id="edit_kode_pos" class="w-full border-gray-300 rounded-lg" required>
+            </div>
+
+            {{-- MAP --}}
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1">Titik Lokasi</label>
+                <div id="editMap" class="w-full h-48 rounded-lg border"></div>
+
+                <input type="hidden" name="latitude" id="edit_latitude">
+                <input type="hidden" name="longitude" id="edit_longitude">
+            </div>
+
+            <div class="flex items-center gap-2">
+                <input type="checkbox" name="is_utama" value="1" id="edit_is_utama">
+                <label class="text-sm text-gray-700">Jadikan alamat utama</label>
+            </div>
+
+            <button type="submit" class="w-full bg-gray-900 text-white py-3 rounded-xl font-bold bg-orange-600 transition">
+                Simpan Perubahan
+            </button>
         </form>
+        </div>
     </div>
 </div>
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 {{-- SCRIPT JAVASCRIPT --}}
 <script>
     function openModal(id) {
-        const modal = document.getElementById(id);
-        modal.classList.remove('hidden');
-        modal.classList.add('flex'); // Tambahkan class flex saat dibuka
+        document.getElementById(id).classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
     }
 
     function closeModal(id) {
-        const modal = document.getElementById(id);
-        modal.classList.add('hidden');
-        modal.classList.remove('flex'); // Hapus class flex saat ditutup
+        document.getElementById(id).classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
     }
 
-    // Fungsi Edit Address yang Aman
-    function editAddress(element) {
-        // Ambil data dari attribute 'data-address'
-        const addressData = element.getAttribute('data-address');
-        const address = JSON.parse(addressData);
+    let editMap, editMarker;
 
-        // Isi form edit dengan data
-        document.getElementById('edit_label').value = address.label;
-        document.getElementById('edit_recipient_name').value = address.recipient_name;
-        document.getElementById('edit_phone').value = address.phone;
-        document.getElementById('edit_full_address').value = address.full_address;
-        
-        // Update Action Form URL
-        const form = document.getElementById('editForm');
-        form.action = "/pelanggan/alamat/" + address.id;
+    function editAddress(element) {
+        const address = JSON.parse(element.dataset.address);
+
+        edit_label.value = address.label;
+        edit_nama_penerima.value = address.nama_penerima;
+        edit_phone.value = address.phone;
+        edit_alamat_lengkap.value = address.alamat_lengkap;
+        edit_provinsi.value = address.provinsi;
+        edit_kota.value = address.kota;
+        edit_kecamatan.value = address.kecamatan;
+        edit_rt.value = address.rt;
+        edit_rw.value = address.rw;
+        edit_kode_pos.value = address.kode_pos;
+        edit_latitude.value = address.latitude;
+        edit_longitude.value = address.longitude;
+        edit_is_utama.checked = address.is_utama;
+
+        document.getElementById('editForm').action = `/pelanggan/alamat/${address.id}`;
 
         openModal('editModal');
+
+        setTimeout(() => {
+            if (!editMap) {
+                editMap = L.map('editMap').setView(
+                    [address.latitude ?? -6.2, address.longitude ?? 106.816],
+                    15
+                );
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(editMap);
+            }
+
+            if (editMarker) editMap.removeLayer(editMarker);
+            editMarker = L.marker([address.latitude, address.longitude]).addTo(editMap);
+
+            editMap.on('click', e => {
+                edit_latitude.value = e.latlng.lat;
+                edit_longitude.value = e.latlng.lng;
+                editMarker.setLatLng(e.latlng);
+            });
+
+            editMap.invalidateSize();
+        }, 300);
     }
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const map = L.map('map').setView([-6.200000, 106.816666], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    let marker;
+
+    map.on('click', function (e) {
+        const { lat, lng } = e.latlng;
+
+        if (marker) {
+            marker.setLatLng(e.latlng);
+        } else {
+            marker = L.marker(e.latlng).addTo(map);
+        }
+
+        document.getElementById('latitude').value = lat;
+        document.getElementById('longitude').value = lng;
+    });
+});
+</script>
+
 @endsection

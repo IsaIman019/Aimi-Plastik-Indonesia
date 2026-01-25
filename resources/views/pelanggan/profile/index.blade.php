@@ -4,7 +4,6 @@
 <div class="bg-gray-50 min-h-screen py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {{-- Breadcrumb --}}
         <div class="text-sm text-gray-500 mb-6">
             <a href="{{ route('home') }}" class="hover:text-orange-600">Beranda</a> /
             <span class="text-gray-900">Profil Saya</span>
@@ -12,9 +11,7 @@
 
         <div class="flex flex-col lg:flex-row gap-8">
 
-            {{-- SIDEBAR KIRI --}}
             <div class="w-full lg:w-1/4">
-                {{-- Kartu User --}}
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6 flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200 border border-gray-300">
                         @if($user->avatar)
@@ -26,7 +23,6 @@
                     </div>
                     <div class="overflow-hidden">
                         <h3 class="font-bold text-gray-900 truncate">{{ $user->nama }}</h3>
-                        <p class="text-xs text-gray-500 truncate">Member Pelanggan</p>
                     </div>
                 </div>
 
@@ -51,10 +47,10 @@
                                     d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                             </svg>
                             Pesanan Saya
-                            @if(isset($pendingOrders) && $pendingOrders > 0)
+                            {{-- @if(isset($pendingOrders) && $pendingOrders > 0)
                             <span
                                 class="ml-auto bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full">{{ $pendingOrders }}</span>
-                            @endif
+                            @endif --}}
                         </a>
 
                         {{-- 3. ALAMAT PENGIRIMAN (LINK KE HALAMAN BARU) --}}
@@ -121,7 +117,7 @@
                                 <p class="text-xs text-gray-500 mb-3">Format: .JPG, .PNG (Max. 2MB)</p>
 
                                 <label
-                                    class="cursor-pointer bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-orange-600 transition inline-block shadow-lg">
+                                    class="cursor-pointer bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-bold bg-orange-600 transition inline-block shadow-lg">
                                     Pilih Foto Baru
                                     <input type="file" name="avatar" class="hidden" onchange="previewImage(event)"
                                         accept="image/*">

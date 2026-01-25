@@ -27,7 +27,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function addresses()
+    public function alamat()
     {
         return $this->hasMany(Alamat::class)->orderBy('is_utama', 'desc');
     }
