@@ -20,26 +20,33 @@ class KeranjangController extends Controller
         return view('pelanggan.keranjang.index', compact('keranjangs'));
     }
 
-    public function getPromoByProduk(Request $request)
+public function getPromoByProduk(Request $request)
 {
+    $request->validate([
+        'produk_ids' => 'required|array|min:1',
+        'produk_ids.*' => 'exists:produk,id',
+    ]);
+
     $produkIds = $request->produk_ids;
 
-    if (empty($produkIds)) {
-        return response()->json([]);
-    }
+    $promos = Promo::whereHas('produks', function ($q) use ($produkIds) {
+        $q->whereIn('produk.id', $produkIds);
+    })
+    ->where('status', 'ACTIVE')
+    ->get()
+    ->map(function ($promo) {
+        return [
+            'id' => $promo->id,
+            'nama' => $promo->nama,
+            'jumlah' => (float) $promo->jumlah
+        ];
+    });
 
-    $promos = Promo::where('status', 'ACTIVE')
-        ->whereDate('tanggal_mulai', '<=', now())
-        ->whereDate('tanggal_selesai', '>=', now())
-        ->whereHas('produks', function ($q) use ($produkIds) {
-            $q->whereIn('produk.id', $produkIds); 
-        })
-        ->with('produks:id,nama')
-        ->get();
-        
 
     return response()->json($promos);
 }
+
+
 
 
 
@@ -50,13 +57,13 @@ class KeranjangController extends Controller
     {
         $request->validate([
             'produk_id' => 'required|exists:produk,id',
-            'quantity' => 'required|integer|min:1'
+            'qty' => 'required|integer|min:1'
         ]);
 
         $produk = Produk::find($request->produk_id);
 
 
-        if ($produk->stok < $request->quantity) {
+        if ($produk->stok < $request->qty) {
             return back()->with('error', 'Stok tidak mencukupi. Stok tersedia: ' . $produk->stok);
         }
 
@@ -66,7 +73,7 @@ class KeranjangController extends Controller
 
         if ($keranjang) {
 
-            $totalQty = $keranjang->qty + $request->quantity;
+            $totalQty = $keranjang->qty + $request->qty;
 
 
             if ($produk->stok < $totalQty) {
@@ -79,7 +86,7 @@ class KeranjangController extends Controller
             Keranjang::create([
                 'user_id' => Auth::id(),
                 'produk_id' => $request->produk_id,
-                'qty' => $request->quantity
+                'qty' => $request->qty
             ]);
         }
 
@@ -90,7 +97,7 @@ class KeranjangController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'quantity' => 'required|integer|min:1'
+            'qty' => 'required|integer|min:1'
         ]);
 
         $keranjang = Keranjang::where('user_id', Auth::id())
@@ -98,13 +105,13 @@ class KeranjangController extends Controller
             ->findOrFail($id);
 
 
-        if ($keranjang->produk->stok < $request->quantity) {
+        if ($keranjang->produk->stok < $request->qty) {
             return response()->json([
                 'message' => 'Stok tidak mencukupi. Stok maksimal: ' . $keranjang->produk->stok
             ], 400);
         }
 
-        $keranjang->update(['qty' => $request->quantity]);
+        $keranjang->update(['qty' => $request->qty]);
 
         return response()->json([
             'message' => 'Jumlah produk berhasil diperbarui.',

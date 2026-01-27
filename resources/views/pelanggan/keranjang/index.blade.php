@@ -245,6 +245,8 @@
 </div>
 
 {{-- JS TETAP SAMA --}}
+@push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/js/pelanggan/keranjang/index.js') }}"></script>
+@endpush
 @endsection

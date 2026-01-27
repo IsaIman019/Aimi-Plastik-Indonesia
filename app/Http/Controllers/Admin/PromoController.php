@@ -113,7 +113,7 @@ public function edit($id)
         'is_all_product' => $promo->is_all_product,
         'tanggal_mulai' => $promo->tanggal_mulai?->format('Y-m-d'),
         'tanggal_selesai' => $promo->tanggal_selesai?->format('Y-m-d'),
-        'produk_ids' => $promo->produks->pluck('id')->values(),
+        'produk_ids' => $promo->produks->pluck('id')->values()->toArray(),
     ]);
 }
 
@@ -134,16 +134,17 @@ public function update(Request $request, $id)
         'produk_ids' => 'array',
     ]);
 
-    $promo->update($data);
+    $promo->update(collect($data)->except('produk_ids')->toArray());
 
-    if ($request->is_all_product) {
-        $promo->produks()->detach();
+    if ($request->boolean('is_all_product')) {
+        $promo->produks()->sync(Produk::pluck('id'));
     } else {
         $promo->produks()->sync($request->produk_ids ?? []);
     }
 
     return response()->json(['message' => 'Updated']);
 }
+
 
 public function destroy($id)
 {

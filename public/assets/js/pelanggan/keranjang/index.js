@@ -30,30 +30,43 @@ function updateQuantity(id, change, manualQty = null) {
     let qtyMobile = document.getElementById(`quantity-mobile-${id}`);
 
     let currentQty = parseInt(
-        (qtyInput && qtyInput.value) || (qtyMobile && qtyMobile.value),
+        (qtyInput && qtyInput.value) || (qtyMobile && qtyMobile.value)
     );
 
     let qty = manualQty ? parseInt(manualQty) : currentQty + change;
     if (qty < 1) qty = 1;
 
-    if (qtyInput) qtyInput.value = qty;
-    if (qtyMobile) qtyMobile.value = qty;
+    fetch(`/pelanggan/keranjang/${id}`, {
+        method: "PUT",
+        headers: {
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                .content,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ qty }),
+    })
+        .then((res) => res.json())
+        .then(() => {
+            if (qtyInput) qtyInput.value = qty;
+            if (qtyMobile) qtyMobile.value = qty;
 
-    let price = document.getElementById(`cart-item-${id}`).dataset.productPrice;
-    let subtotal = price * qty;
+            let price = document.getElementById(`cart-item-${id}`).dataset
+                .productPrice;
+            let subtotal = price * qty;
 
-    let subtotalDesktop = document.getElementById(`subtotal-${id}`);
-    if (subtotalDesktop) {
-        subtotalDesktop.innerText = subtotal.toLocaleString("id-ID");
-    }
+            const el = document.getElementById(`subtotal-${id}`);
+            if (el) {
+                el.innerText = subtotal.toLocaleString("id-ID");
+            }
 
-    let subtotalMobile = document.getElementById(`subtotal-mobile-${id}`);
-    if (subtotalMobile) {
-        subtotalMobile.innerText = subtotal.toLocaleString("id-ID");
-    }
+            const elMobile = document.getElementById(`subtotal-mobile-${id}`);
+            if (elMobile) {
+                elMobile.innerText = subtotal.toLocaleString("id-ID");
+            }
 
-    hitungTotal();
-    applyPromoCalculation();
+            hitungTotal();
+            applyPromoCalculation();
+        });
 }
 
 function hitungTotal() {
@@ -80,10 +93,19 @@ function removeItem(id) {
         confirmButtonText: "Ya",
     }).then((res) => {
         if (res.isConfirmed) {
-            document.getElementById(`cart-item-${id}`)?.remove();
-            document.getElementById(`cart-item-mobile-${id}`)?.remove();
-            hitungTotal();
-            applyPromoCalculation();
+            fetch(`/pelanggan/keranjang/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector(
+                        'meta[name="csrf-token"]',
+                    ).content,
+                },
+            }).then(() => {
+                document.getElementById(`cart-item-${id}`)?.remove();
+                document.getElementById(`cart-item-mobile-${id}`)?.remove();
+                hitungTotal();
+                applyPromoCalculation();
+            });
         }
     });
 }
@@ -206,7 +228,7 @@ function applyPromoCalculation(subtotal = null) {
         document.querySelectorAll(".cart-checkbox:checked").forEach((cb) => {
             const id = cb.dataset.id;
             const qty = parseInt(
-                document.getElementById(`quantity-${id}`).value,
+                document.getElementById(`quantity-${id}`).value
             );
             const price = parseInt(cb.dataset.price);
             subtotal += price * qty;
