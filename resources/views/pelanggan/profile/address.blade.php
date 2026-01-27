@@ -80,12 +80,12 @@
                     {{-- LIST ALAMAT --}}
                     <div class="space-y-4">
                         @forelse($addresses as $address)
-                            <div class="border {{ $address->is_primary ? 'border-orange-500 bg-orange-50/30' : 'border-gray-200' }} rounded-xl p-6 relative group transition hover:shadow-md">
+                            <div class="border {{ $address->is_utama ? 'border-orange-500 bg-orange-50/30' : 'border-gray-200' }} rounded-xl p-6 relative group transition hover:shadow-md">
                                 <div class="flex justify-between items-start">
                                     <div>
                                         <div class="flex items-center gap-3 mb-2">
                                             <span class="font-bold text-gray-800">{{ $address->label }}</span>
-                                            @if($address->is_primary)
+                                            @if($address->is_utama)
                                                 <span class="bg-orange-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">Utama</span>
                                             @endif
                                         </div>
@@ -110,7 +110,7 @@
                                                 <button type="submit" class="text-red-600 text-sm font-bold hover:underline">Hapus</button>
                                             </form>
                                         </div>
-                                        @if(!$address->is_primary)
+                                        @if(!$address->is_utama)
                                             <a href="{{ route('pelanggan.address.primary', $address->id) }}" class="mt-4 px-4 py-2 border border-gray-300 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 transition">
                                                 Jadikan Utama
                                             </a>
@@ -297,7 +297,7 @@
                 <label class="text-sm text-gray-700">Jadikan alamat utama</label>
             </div>
 
-            <button type="submit" class="w-full bg-gray-900 text-white py-3 rounded-xl font-bold bg-orange-600 transition">
+            <button type="submit" class="w-full bg-gray-900 text-white py-3 rounded-xl font-bold  yrewq ``      bg-orange-600 transition">
                 Simpan Perubahan
             </button>
         </form>

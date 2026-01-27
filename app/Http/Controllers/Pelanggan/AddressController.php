@@ -79,18 +79,53 @@ class AddressController extends Controller
     // Update Alamat
     public function update(Request $request, $id)
     {
-        // Pastikan hanya bisa edit alamat milik sendiri
-        $address = Alamat::where('user_id', Auth::id())->findOrFail($id);
+        $request->validate([
+            'label'           => 'required|string|max:50',
+            'nama_penerima'   => 'required|string|max:100',
+            'phone'           => 'required|string|max:20',
+            'alamat_lengkap'  => 'required|string',
+            'provinsi'        => 'required|string|max:100',
+            'kota'            => 'required|string|max:100',
+            'kecamatan'       => 'required|string|max:100',
+            'kode_pos'        => 'required|string|max:10',
+            'rt'              => 'nullable|string|max:5',
+            'rw'              => 'nullable|string|max:5',
+            'latitude'        => 'nullable|string',
+            'longitude'       => 'nullable|string',
+            'is_utama'        => 'nullable|boolean',
+        ]);
+
+        $user = Auth::user();
+
+        $address = Alamat::where('user_id', $user->id)->findOrFail($id);
+
+        // Kalau checkbox "jadikan utama" dicentang
+        if ($request->has('is_utama')) {
+            $user->alamat()->update(['is_utama' => false]);
+            $address->is_utama = true;
+        } else {
+            $address->is_utama = false;
+        }
 
         $address->update([
-            'label' => $request->label,
-            'recipient_name' => $request->recipient_name,
-            'phone' => $request->phone,
-            'full_address' => $request->full_address,
+            'label'           => $request->label,
+            'nama_penerima'   => $request->nama_penerima,
+            'phone'           => $request->phone,
+            'alamat_lengkap'  => $request->alamat_lengkap,
+            'provinsi'        => $request->provinsi,
+            'kota'            => $request->kota,
+            'kecamatan'       => $request->kecamatan,
+            'kode_pos'        => $request->kode_pos,
+            'rt'              => $request->rt,
+            'rw'              => $request->rw,
+            'latitude'        => $request->latitude,
+            'longitude'       => $request->longitude,
+            'is_utama'        => $address->is_utama,
         ]);
 
         return back()->with('success', 'Alamat berhasil diperbarui.');
     }
+
 
     // Set Alamat Utama
     public function setPrimary($id)
