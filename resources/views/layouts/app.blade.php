@@ -22,13 +22,7 @@
 
 <body class="antialiased bg-gray-50 text-gray-800">
 
-    {{-- LOGIKA HITUNG KERANJANG --}}
-    @php
-    $cartCount = 0;
-    if(Auth::check() && Auth::user()->role === 'pelanggan'){
-    try { $cartCount = \App\Models\Cart::where('user_id', Auth::id())->count(); } catch(\Exception $e) {}
-    }
-    @endphp
+   
 
     {{-- NAVBAR --}}
     @if(!request()->is('admin/*'))
@@ -146,26 +140,46 @@
                         Ke Dashboard
                     </a>
                     @else
-                    <a href="{{ route('keranjang') }}"
-                        class="relative p-2 text-gray-500 hover:text-orange-600 transition group mr-2">
+                   <a href="{{ route('keranjang') }}"
+                    class="relative inline-flex items-center justify-center p-2 text-gray-500 hover:text-orange-600 transition mr-2">
+
+                        {{-- ICON --}}
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                         </svg>
+
+                        {{-- BADGE --}}
                         @if($cartCount > 0)
-                        <span
-                            class="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full border-2 border-white">
-                            {{ $cartCount }}
-                        </span>
+                            <span
+                                class="absolute -top-1 -right-1
+                                    min-w-[18px] h-[18px]
+                                    flex items-center justify-center
+                                    text-[10px] font-bold text-white
+                                    bg-red-600 rounded-full border-2 border-white">
+                                {{ $cartCount }}
+                            </span>
                         @endif
                     </a>
+
+
                     @endif
 
                     <div class="relative group cursor-pointer ml-1">
                         <div class="flex items-center gap-2">
-                            <div
-                                class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-xs border border-orange-200">
-                                {{ substr(Auth::user()->name, 0, 1) }}
+                            <div class="w-8 h-8 rounded-full overflow-hidden border border-gray-200 bg-gray-100">
+                                @if(Auth::user()->avatar)
+                                    <img
+                                        src="{{ asset('storage/' . Auth::user()->avatar) }}"
+                                        alt="Avatar"
+                                        class="w-full h-full object-cover"
+                                    >
+                                @else
+                                    <div
+                                        class="w-full h-full flex items-center justify-center bg-orange-100 text-orange-600 font-bold text-xs">
+                                        {{ strtoupper(substr(Auth::user()->nama, 0, 1)) }}
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -183,13 +197,13 @@
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 border-b border-gray-50">
                                 Akun Saya
                             </a>
+                            <a href="{{ route('pelanggan.orders.index') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">
+                            Pesanan Saya
+                            </a>
                             <a href="{{ route('pelanggan.address.index') }}"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600 border-b border-gray-50">
                                 Alamat Pengiriman
-                            </a>
-                            <a href="{{ route('pelanggan.orders.index') }}"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-600">
-                                Pesanan Saya
                             </a>
                             @endif
 
